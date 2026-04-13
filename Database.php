@@ -1,4 +1,11 @@
 <?php namespace core;
+
+/**
+ * Экземпляр класса Database существует для взаимодействия с БД
+ * Класс осущесвляет возможможность открыть только одно подключение к БД
+ * @query => отвечает за выполнение SQL запросов к БД
+ */
+
 class Database{
     private static $_instance = null;
     private $_connection;
