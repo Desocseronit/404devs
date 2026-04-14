@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            padding: 0px;
+            margin: 0px;
+            box-sizing: border-box;
+           
+        }
+        header{
+            width: 100%;
+            height: 50px;
+            display: flex;
+            justify-content: space-between;
+            background-color: black;
+            align-items: center;
+            padding: 0 30px;
+            height: 80px;
+        }
+        header a{
+            color: white;
+            text-decoration: none;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .header_second_part{
+            display: flex;
+            gap: 10px;
+        }
+        .Enter, .Register{
+            background-color: transparent;
+            border:1px solid white ;
+            color:white ;
+            cursor: pointer;
+            padding: 5px 15px;  
+        }
+        .form-group {
+            background-color: #1a1a1a;
+            width: 600px;
+            margin: 50px auto;
+            padding: 40px;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+        }
+        h1{
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
+        .group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            align-items: center;
+        }
+        .group input {
+            width: 80%;
+            padding: 12px 20px;
+            border-radius: 25px; 
+            border: none;
+            background-color: rgb(231, 231, 231);
+            font-size: 16px;
+            outline: none;
+        }
+        .button_enter button{
+            margin-top: 25px;
+            padding: 10px;
+            border-radius: 25px;
+            border: none;
+            background-color: rgb(231, 231, 231);
+            color: #555;
+            font-weight: bold;
+            font-size: 18px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header_first_part">
+            <a href="#">Forum 404devs</a>
+        </div>
+        <div class="header_second_part">
+            <button type="button" class="Enter">Войти</button>
+            <button type="button" class="Register">Регистрация</button>
+        </div>
+    </header>
+    <main>
+        <div class="form-group">
+            <h1>Приветсвуем вас на 404devs!</h1>
+            <div class="group">
+                <input type="email" placeholder="Введите почту">
+                <input type="password" placeholder="Введите пароль">
+                <input type="password" placeholder="Повторите пароль">
+            </div>
+            <div class="button_enter">
+                <button type="submit">Продолжить</button>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
