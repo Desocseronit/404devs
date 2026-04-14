@@ -1,4 +1,4 @@
-# 404 dev
+# 404devs
 
 > Developer Forum — a free space for comfortable communication and knowledge growth.
 
