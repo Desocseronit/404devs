@@ -31,7 +31,12 @@ class Database{
         return $this->_connection;
     }
 
-    public function query($query){
+    public function getRecord($tablename , $attributes = '*' , $condition = null , $limit = null){
+        $query = "SELECT $attributes FROM $tablename $condition $limit";
+        return $this->query($query);
+    }
+
+    private function query($query){
         $query = trim($query);
         if(str_starts_with(strtolower($query), "select")){
             $records = pg_query($this->connection(), $query);
@@ -44,6 +49,7 @@ class Database{
         }
         else{
             pg_query($this->connection(), $query);
+            return true;
         }
     }
 }
