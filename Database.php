@@ -40,6 +40,13 @@ class Database{
         return $this->query($query);
     }
 
+    /**
+    * можно использовать плейсхолдеры (онли значения, не имена табоиц и полей)
+    * $stmt = $pdo->prepare('SELECT * FROM users WHERE id = ?');
+    *$stmt->execute([$_GET['id']]); // Данные ушли отдельно, взломать невозможно
+    * и сделать белые списки для таблиц( сделать readonly табицы (напрмер роли и права .....) и таблицы где можно записывать (users , posts ....)
+    */
+
     private function query($query){
         $query = trim($query);
         if(str_starts_with(strtolower($query), "select")){
