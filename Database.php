@@ -31,7 +31,11 @@ class Database{
         return $this->_connection;
     }
 
-    public function getRecord($tablename , $attributes = '*' , $condition = null , $limit = null){
+    public function getRecord($tablename , $attributes = '*' , $condition = [] , $limit = null){
+        if(is_array($attributes)){
+            $attributes = implode(' , ', $attributes);
+        }
+        $condition = conditionConstructor($condition);
         $query = "SELECT $attributes FROM $tablename $condition $limit";
         return $this->query($query);
     }
