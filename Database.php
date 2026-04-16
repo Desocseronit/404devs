@@ -127,12 +127,12 @@ class Database{
         
         $sql = "INSERT INTO $tablename (" . implode(', ', $fields) . ") 
                 VALUES (" . implode(', ', $placeholders) . ")
-                RETURNING id";  
+                RETURNING *";  
         
         $result = $this->query($sql, array_values($data));
         
         $row = pg_fetch_assoc($result);
-        return $row ? $row['id'] : null;
+        return new Record($tablename , $row['id'] , $row);
     }
 
     // UPDATE
