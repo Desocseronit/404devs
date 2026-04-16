@@ -22,8 +22,8 @@ class Record{
     public function __set($name , $value){
         if(array_key_exists($name , $this->_oldAtributes)){
             if(!$name != 'id'){
-                $this->attributes[$name] = $value;
-                $this->$name = &$this->attributes[$name];
+                $this->atributes[$name] = $value;
+                $this->$name = &$this->atributes[$name];
 
                 return $value;
             } else return false;
@@ -36,7 +36,7 @@ class Record{
         if(!isset($this->_id)) return false;
         else{
             foreach($this->_oldAtributes as $key=>$val) $newValues[$key] = $this->atributes[$key];
-            Database::instance()->updateRecord($this->_tableName , $this->_tableName , "WHERE id = $1", [$this->_id]);
+            Database::instance()->updateRecord($this->_tableName , $newValues , "id = $1", [$this->_id]);
         }
     }
 }
