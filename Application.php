@@ -7,7 +7,7 @@ require_once('Request.php');
 require_once('Response.php');
 require_once('Record.php');
 
-class Aplication{
+class Application{
 
 }
 
