@@ -1,6 +1,8 @@
 <?php namespace core;
 /**
  * Экземпляр класса Record представляет собой запись из БД
+ * 
+ * @update => обновляют данные в БД , записывая новые данные из ассоциативного массива $atributes
  */
 class Record{
     private $_tableName;
