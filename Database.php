@@ -105,7 +105,7 @@ class Database{
         $records = $this->query($sql, $params);
         $res = [];
         while ($record = pg_fetch_assoc($records)){
-            $res[] = $record;
+            $res[] = new Record($tablename , $record['id'] , $record);
         }
         $res = new Collection($res);
         return $res;
@@ -190,7 +190,7 @@ class Database{
         $records = $this->query($sql, [$id]);
         $res = [];
         while ($record = pg_fetch_assoc($records)){
-            $res[] = $record;
+            $res[] = new Record($tablename , $record['id'] , $record);
         }
         $res = new Collection($res);
         return $res;
