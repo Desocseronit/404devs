@@ -2,28 +2,28 @@
 /**
  * Экземпляр класса Record представляет собой запись из БД
  * 
- * @update => обновляют данные в БД , записывая новые данные из ассоциативного массива $atributes
+ * @update => обновляют данные в БД , записывая новые данные из ассоциативного массива $attributes
  */
 class Record{
     private $_tableName;
     private $_id;
-    private $_oldAtributes;
-    public $atributes;
+    private $_oldAttributes;
+    public $attributes;
 
-    public function __construct($tableName, $id , $atributes){
+    public function __construct($tableName, $id , $atritbutes){
         $this->_tableName = $tableName;
         $this->_id = $id;
-        $this->_oldAtributes = $atributes;
+        $this->_oldattributes = $attributes;
         
 
-        foreach($atributes as $key=>$val) $this->$key = $val;
+        foreach($attributes as $key=>$val) $this->$key = $val;
     }
 
     public function __set($name , $value){
-        if(array_key_exists($name , $this->_oldAtributes)){
+        if(array_key_exists($name , $this->_oldattributes)){
             if(!$name != 'id'){
-                $this->atributes[$name] = $value;
-                $this->$name = &$this->atributes[$name];
+                $this->attributes[$name] = $value;
+                $this->$name = &$this->attributes[$name];
 
                 return $value;
             } else return false;
@@ -35,7 +35,7 @@ class Record{
 
         if(!isset($this->_id)) return false;
         else{
-            foreach($this->_oldAtributes as $key=>$val) $newValues[$key] = $this->atributes[$key];
+            foreach($this->_oldattributes as $key=>$val) $newValues[$key] = $this->attributes[$key];
             Database::instance()->updateRecord($this->_tableName , $newValues , "id = $1", [$this->_id]);
         }
     }
