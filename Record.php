@@ -10,17 +10,17 @@ class Record{
     private $_oldAttributes;
     public $attributes;
 
-    public function __construct($tableName, $id , $atritbutes){
+    public function __construct($tableName, $id , $attributes){
         $this->_tableName = $tableName;
         $this->_id = $id;
-        $this->_oldattributes = $attributes;
+        $this->_oldAttributes = $attributes;
         
 
         foreach($attributes as $key=>$val) $this->$key = $val;
     }
 
     public function __set($name , $value){
-        if(array_key_exists($name , $this->_oldattributes)){
+        if(array_key_exists($name , $this->_oldAttributes)){
             if(!$name != 'id'){
                 $this->attributes[$name] = $value;
                 $this->$name = &$this->attributes[$name];
