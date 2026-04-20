@@ -6,6 +6,7 @@
  * 1) type => тип запроса (POST , GET .....)
  * 2) head => заголовки запроса
  * 3) body => тело запроса
+ * 4) files => файлы
  */
 
 class Request
@@ -31,6 +32,14 @@ class Request
             $requestInfo['body'] = null;
         }
 
+        if($_FILES){
+            $requestInfo['files'] = new Collection($_FILES);
+        }
+
         $this->_requestInfo = new Collection($requestInfo);
+    }
+
+    public function getInfo(){
+        return $this->_requestInfo;
     }
 }
