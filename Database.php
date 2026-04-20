@@ -51,7 +51,7 @@
 class Database{
     private static $_instance = null;
     private $_connection;
-    static private $allowedTables = ['test'];
+    static private $readOnly = ['categories' , 'global_categories' , 'levels' , 'rights' , 'role' , 'role_rights', 'role_user' , 'status'];
 
     private function __construct($connect_str) {
         $this->_connection = pg_connect($connect_str);
@@ -115,7 +115,7 @@ class Database{
 
     //INSERT
     public function insertRecord($tablename, $data) {
-        $tablename = $this->tableNameValidator($tablename);
+        $tablename = $this->tableNameValidator($tablename, true);
         
         $fields = array_keys($data);
         $fields = array_map([$this, 'fieldValidator'], $fields);
@@ -137,7 +137,7 @@ class Database{
 
     // UPDATE
     public function updateRecord($tablename, $data, $where, $whereParams = []) {
-        $tablename = $this->tableNameValidator($tablename);
+        $tablename = $this->tableNameValidator($tablename, true);
 
         $setParts = [];
         $updateParams = [];
@@ -172,7 +172,7 @@ class Database{
     
     // DELETE
     public function deleteRecord($tablename, $where, $params = []) {
-        $tablename = $this->tableNameValidator($tablename);
+        $tablename = $this->tableNameValidator($tablename, true);
         
         $sql = "DELETE FROM $tablename WHERE $where";
         
@@ -198,8 +198,8 @@ class Database{
 
     }
 
-    private function tableNameValidator($tabName){
-        if(!in_array($tabName , Database::$allowedTables)){
+    private function tableNameValidator($tabName, $isWrite = false){
+        if(in_array($tabName , Database::$readOnly) && $isWrite){
             return false;
         }
         return $tabName;
