@@ -8,8 +8,8 @@ require_once('Response.php');
 require_once('Record.php');
 require_once('User.php');
 require_once('Image.php');
-
-
+require_once('Post.php');
+require_once('Answer.php');
 
 class Application{
 
