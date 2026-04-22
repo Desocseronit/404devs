@@ -24,13 +24,13 @@ class Post{
     }
 
     public function __set($name , $value){
-        $this->$name = &$this->record[$name];
+        $this->$name = &$this->record->$name;
         return $value;
     }
 
     public static function create(PostData $data){
         $postData = [];
-        $postData['created_at'] = time();
+        $postData['created_at'] = date('Y-m-d H:i:s');
         $postData['user_id'] = $data->user->id;
         $postData['title'] = $data->title;
         $postData['text'] = $data->text;

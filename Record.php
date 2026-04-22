@@ -35,7 +35,7 @@ class Record{
 
         if(!isset($this->_id)) return false;
         else{
-            foreach($this->_oldattributes as $key=>$val) $newValues[$key] = $this->attributes[$key];
+            foreach($this->_oldAttributes as $key=>$val) $newValues[$key] = $this->attributes[$key];
             Database::instance()->updateRecord($this->_tableName , $newValues , "id = $1", [$this->_id]);
         }
     }

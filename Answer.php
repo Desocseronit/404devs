@@ -22,7 +22,7 @@ class Answer{
     }
 
     public function __set($name , $value){
-        $this->$name = &$this->record[$name];
+        $this->$name = &$this->record->$name;
         return $value;
     }
 
@@ -32,6 +32,7 @@ class Answer{
         $answerData['post_id'] = $data->post->id;
         $answerData['text'] = $data->text;
         $answerData['votes'] = 0;
+        $answerData['created_at'] = date('Y-m-d H:i:s');
 
         $answer = Database::instance()->insertRecord("answers" , $answerData);
         

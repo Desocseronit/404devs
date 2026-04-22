@@ -60,10 +60,6 @@ class Collection{
     public function has($key) { return isset($this->_items[$key]); }
 
     public function stringify()  {
-        $stringifyArr = [];
-        foreach($this->_items as $item){
-            $stringifyArr[] = $item->stringify();
-        }
-        return json_encode($stringifyArr); 
+        return json_encode(array_map(fn($item) => $item->getValue(), $this->_items)); 
     }
 }
