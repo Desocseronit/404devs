@@ -3,8 +3,8 @@
 use core\{Response};
 
 class NewPost{
-    public function execute(){
-        $test = new Response(200, ['message' => 'penis']);
+    public function execute($req){
+        $test = new Response(200, ['message' => 'not penis)']);
         $test -> send();
     }
 }

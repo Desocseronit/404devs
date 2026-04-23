@@ -3,18 +3,19 @@
 class Application{
     static public function runAction(){
         self::requireFiles(__DIR__ .'/modules/');
-
-        $actionName = new Request();
-        $actionName = $actionName->getInfo()->params->getValue()->action->getvalue();
+        echo '<pre>';
+        $req = new Request();
+        var_dump($req);
+        $actionName = $req->getInfo()->params->getValue()->action->getvalue();
         require_once('.\\actions\\'.$actionName.'.php');
         $className = "core\\actions\\" . $actionName;
 
         if (class_exists($className)) {
             $handler = new $className();
-            $handler->execute();
+            $handler->execute($req);
         } else {
-            $req = new Response(404 , ['message' => 'Not existed']);
-            $req->send();
+            $res = new Response(404 , ['message' => 'Not existed']);
+            $res->send();
         }
     }
 
