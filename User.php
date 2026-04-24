@@ -72,6 +72,12 @@ class User{
         $res = Database::instance()->selectRecord('user','*',[['auth_token','=',$token]],1);
         return $res;
     }
+     public function changeAvatar(Image $img){
+        $this->id::instance()->insertRecord('user_avatar',[
+            'user_id' => $this->id,
+            "avatar" => $img->path
+        ]);
+    }
  public static function find($id){
   return new self(Database::instance()->getOne('users',$id));
  }
