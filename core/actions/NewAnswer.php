@@ -1,23 +1,23 @@
 <?php namespace core\actions;
-
 use core\{Response};
-use core\{Database};
 use core\{Post};
+use core\{Database};
+use core\{Answer};
 use core\{User};
 
-
-class NewPost{
+class NewAnswer{
     public function execute($req){
         $body = $req->getInfo()->body->getValue();
         $user = User::find($body->userId);
+        $post = Post::find($body->postId);
         $imgs;
         if($req->getInfo()->files){
             $imgs = new NewImages();
             $imgs = $imgs->execute($req);
         }
-        $postData = new PostData(user: $user , title: $body->title , text: $body->text , category_id: $body->categoty_id , level_id: $body->level_id , images_ids: $imgs);
-        $post = new Post($postData);
-        $response = new Response(201 , ['post' => $post]);
+        $answerData = new AnswerData(user: $user , post: $post , text: $body->text , images_ids: $imgs);
+        $answer = new Answer($answerData);
+        $response = new Response(201 , ['answer' = $answer]);
         $response->send();
     }
 }
