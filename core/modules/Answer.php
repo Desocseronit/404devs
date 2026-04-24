@@ -44,4 +44,7 @@ class Answer{
 
         return new self($answer);
     }
+    public static function find($id){
+        return new self(Database::instance()->getOne('answers' , $id));
+    }
 }
