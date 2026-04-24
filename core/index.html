@@ -2,14 +2,525 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Тест отправки картинки</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>404devs — Форум разработчиков</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #101113;
+            --bg-secondary: #272a30;
+            --bg-card: #111113;
+            --bg-sidebar: #111113;
+            --border-color: #df0aea99;
+            --text-primary: #f0f3fa;
+            --text-secondary: #a6b0cf;
+            --accent: #ca14a2;
+            --accent-hover: #d822ae;
+            --footer-bg: #00000082;
+            --header-border: #df0aea61;
+            --transition: all 0.2s ease;
+        }
+
+        body {
+            font-family: 'Inter', 'Roboto', 'Montserrat', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.5;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* мейн контейнер */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+            width: 100%;
+        }
+
+        /* Шапка */
+        .site-header {
+            background-color: #00000082;
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid var(--header-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            padding: 16px 0;
+            gap: 16px;
+        }
+
+        .logo {
+            font-size: 1.85rem;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            background: linear-gradient(135deg, #fff 0%, var(--accent) 90%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        .logo:hover {
+            opacity: 0.9;
+            background: linear-gradient(135deg, var(--accent) 0%, #fff 90%);
+            background-clip: text;
+            -webkit-background-clip: text;
+        }
+
+        .main-nav ul {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        .main-nav a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: var(--transition);
+            padding: 6px 0;
+            border-bottom: 2px solid transparent;
+        }
+        .main-nav a:hover {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+
+        /* разещение основного контента */
+        .dashboard-layout {
+            display: flex;
+            gap: 32px;
+            align-items: flex-start;
+            margin: 40px 0 56px;
+            flex-wrap: wrap;
+        }
+
+        /* навигация */
+        .sidebar-nav {
+            flex: 0 0 280px;
+            background: var(--bg-sidebar);
+            border-radius: 24px;
+            border: 1px solid var(--border-color);
+            padding: 20px 0 20px 0;
+            position: sticky;
+            top: 90px;
+            backdrop-filter: blur(4px);
+        }
+
+        .nav-section {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .nav-section li {
+            width: 100%;
+        }
+        .nav-section a {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 12px 20px 12px 24px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            border-radius: 14px;
+            transition: var(--transition);
+            margin: 0 10px;
+        }
+        .nav-section a i {
+            width: 26px;
+            font-size: 1.2rem;
+            color: var(--accent);
+            transition: var(--transition);
+        }
+        .nav-section a:hover {
+            background: #ee25c61f;
+            color: var(--accent);
+            transform: translateX(4px);
+        }
+        .nav-section a:hover i {
+            color: var(--accent-hover);
+        }
+
+        /* фигня для структуры ибо места не хватает */
+        .sidebar-extra {
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-color);
+            margin-left: 16px;
+            margin-right: 16px;
+        }
+        .sidebar-extra p {
+            font-size: 0.75rem;
+            color: #6c7399;
+            letter-spacing: 0.2px;
+        }
+
+        /* мейн часть для карт */
+        .content-area {
+            flex: 1;
+            min-width: 0;
+        }
+
+        /* стили карточек */
+        .forum-preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+        .topic-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 22px 26px;
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .topic-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 30px -12px #00000080;
+            border-color: var(--accent);
+        }
+        .topic-card h3 {
+            font-size: 1.35rem;
+            margin-bottom: 12px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        .topic-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 14px;
+        }
+        .topic-meta {
+            margin-top: 12px;
+            font-size: 0.8rem;
+            color: #7f86aa;
+            display: flex;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+        .topic-meta i {
+            margin-right: 6px;
+            color: var(--accent);
+        }
+
+        /* тута блок для правил и прочего */
+        .legal-links {
+            margin: 16px 0 20px;
+            padding: 24px 0 20px;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            text-align: center;
+        }
+        .legal-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 32px;
+            list-style: none;
+        }
+        .legal-list a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: var(--transition);
+            letter-spacing: 0.2px;
+        }
+        .legal-list a:hover {
+            color: var(--accent);
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        /* подвал */
+        .site-footer {
+            background-color: var(--footer-bg);
+            border-top: 1px solid var(--border-color);
+            padding: 48px 0 28px;
+            margin-top: auto;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 40px;
+            margin-bottom: 48px;
+        }
+        .footer-col h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #ffffff;
+            letter-spacing: -0.2px;
+            position: relative;
+            display: inline-block;
+        }
+        .footer-col h4:after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 42px;
+            height: 3px;
+            background: var(--accent);
+            border-radius: 4px;
+        }
+        .contact-info p {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+        .contact-info i {
+            width: 24px;
+            color: var(--accent);
+            font-size: 1.1rem;
+        }
+        .about-text {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+        .social-links {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .social-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1rem;
+            transition: var(--transition);
+            width: fit-content;
+        }
+        .social-links a i {
+            width: 28px;
+            font-size: 1.2rem;
+            transition: transform 0.2s;
+        }
+        .social-links a:hover {
+            color: var(--accent);
+            transform: translateX(6px);
+        }
+        .social-links a:hover i {
+            transform: scale(1.1);
+        }
+        .copyright {
+            text-align: center;
+            padding-top: 28px;
+            border-top: 1px solid #ffffff14;
+            font-size: 0.8rem;
+            color: #6c7399;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        /* общие ссылки + контакты */
+        a {
+            text-decoration: none;
+        }
+        .contact-info a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-bottom: 1px dashed transparent;
+            transition: var(--transition);
+        }
+        .contact-info a:hover {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+
+        /* Адаптивность */
+        @media (max-width: 900px) {
+            .dashboard-layout {
+                flex-direction: column;
+            }
+            .sidebar-nav {
+                flex: 0 0 auto;
+                width: 100%;
+                position: static;
+                padding: 12px 0 16px;
+            }
+            .nav-section {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 8px;
+            }
+            .nav-section li {
+                width: auto;
+            }
+            .nav-section a {
+                padding: 8px 18px;
+                margin: 0;
+                border-radius: 40px;
+                background: #ffffff0a;
+            }
+            .sidebar-extra {
+                display: none;
+            }
+            .forum-preview {
+                grid-template-columns: 1fr;
+                cursor: pointer;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .header-inner {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            .main-nav ul {
+                gap: 1.5rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .legal-list {
+                gap: 18px;
+                flex-direction: column;
+                align-items: center;
+            }
+            .container {
+                padding: 0 18px;
+            }
+            .topic-card {
+                padding: 18px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <form action="http://26.152.118.24/Application.php" method="POST" enctype="multipart/form-data">
-        <label>Выберите картинку:</label>
-        <input type="file" name="image" accept="image/*" required>
-        <br><br>
-        <button type="submit">Отправить</button>
-    </form>
+
+<header class="site-header">
+    <div class="container header-inner">
+        <a href="#" class="logo">Forum:404devs</a>
+        <nav class="main-nav" aria-label="Основная навигация">
+            <ul>
+                <li><a href="#">Главная</a></li>
+                <li><a href="#">Категории</a></li>
+                <li><a href="#">Профиль</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <div class="container">
+        <div class="dashboard-layout">
+            <aside class="sidebar-nav" aria-label="Навигация разделов форума">
+                <ul class="nav-section">
+                    <li><a href="#"><i class="fas fa-store"></i> Каталог</a></li>
+                    <li><a href="#"><i class="fas fa-newspaper"></i> Новости</a></li>
+                    <li><a href="#"><i class="fas fa-users"></i> Сообщества</a></li>
+                    <li><a href="#"><i class="fas fa-ad"></i> Реклама</a></li>
+                    <li><a href="#"><i class="fas fa-bell"></i> Подписка</a></li>
+                    <li><a href="#"><i class="fas fa-briefcase"></i> Вакансии</a></li>
+                </ul>
+                <div class="sidebar-extra">
+                    <p><i class="fas fa-users-between"></i> 1,280 участников онлайн</p>
+                </div>
+            </aside>
+
+            <div class="content-area">
+                <div class="forum-preview">
+                    <div class="topic-card">
+                        <h3>Горячая тема: AI в разработке</h3>
+                        <p>Обсуждение новых инструментов и трендов. Присоединяйтесь к сообществу!</p>
+                        <div class="topic-meta">
+                            <span><i class="far fa-comment"></i> 127 ответов</span>
+                            <span><i class="far fa-eye"></i> 2.4k просмотров</span>
+                        </div>
+                    </div>
+                    <div class="topic-card">
+                        <h3>Frontend-среда</h3>
+                        <p>Советы по верстке, современные подходы, pixel perfect и адаптив.</p>
+                        <div class="topic-meta">
+                            <span><i class="far fa-comment"></i> 84 ответа</span>
+                            <span><i class="far fa-eye"></i> 1.2k просмотров</span>
+                        </div>
+                    </div>
+                    <div class="topic-card">
+                        <h3>Вакансии для разработчиков</h3>
+                        <p>Работодатели предлагают интересные проекты. Раздел "Вакансии" ждет тебя.</p>
+                        <div class="topic-meta">
+                            <span><i class="fas fa-briefcase"></i> 6 новых вакансий</span>
+                            <span><i class="far fa-clock"></i> сегодня</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="legal-links">
+                    <ul class="legal-list">
+                        <li><a href="#">Правила форума</a></li>
+                        <li><a href="#">Политика конфиденциальности</a></li>
+                        <li><a href="#">Пользовательское соглашение</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer class="site-footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>Контакты</h4>
+                <div class="contact-info">
+                    <p><i class="fas fa-map-marker-alt"></i> г. Ставрополь, ул. Нормальная, д. 52</p>
+                    <p><i class="fas fa-phone-alt"></i> <a href="tel:+79001234567">+7 (900) 123-45-67</a></p>
+                    <p><i class="fas fa-envelope"></i> <a href="mailto:Muharr1488@gmail.com">Muharr1488@gmail.com</a></p>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>О компании</h4>
+                <div class="about-text">
+                    Мы создаем цифровые решения для бизнеса уже более 10 лет. Наша цель — делать интернет красивее и удобнее для каждого пользователя
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Мы в соц.сетях</h4>
+                <div class="social-links">
+                    <a href="#" target="_blank" rel="noopener noreferrer"><i class="fab fa-vk"></i> Вконтакте</a>
+                    <a href="#" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f"></i> Facebook</a>
+                    <a href="#" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i> Instagram</a>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            <span>© 2026 Forum:404devs</span>
+            <span>|</span>
+            <span>Все права защищены</span>
+        </div>
+    </div>
+</footer>
+
 </body>
 </html>
