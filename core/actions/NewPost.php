@@ -1,10 +1,22 @@
 <?php namespace core\actions;
 
 use core\{Response};
+use core\{Database};
+use core\{Post};
+use core\{User};
+
 
 class NewPost{
     public function execute($req){
-        $test = new Response(200, ['message' => 'not penis)']);
-        $test -> send();
+        $body = $req->getInfo()->body->getValue();
+        $user = User::find($body->userId);
+        $imgs;
+        if($req->getInfo()->files){
+            $imgs = new NewImages();
+            $imgs = $imgs->execute($req);
+        }
+        $postData = new PostData(user: $user , title: $body->title , text: $body->text , category_id: $body->categoty_id , level_id: $body->level_id , images_ids: $imgs);
+        $post = new Post($postData);
+        $response = new Response(201 , ['post' => $post]);
     }
 }
