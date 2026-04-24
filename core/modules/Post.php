@@ -49,4 +49,8 @@ class Post{
 
         return new self($post);
     }
+
+    public static function find($id){
+        return new self(Database::instance()->getOne('posts' , $id));
+    }
 }
