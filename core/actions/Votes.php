@@ -1,6 +1,6 @@
 <?php namespace core\actions
     use core\{Post};
-class NewVote{
+class Votes{
     public function execute ($req){
         $body = $req->getInfo()->body->getValue();
         $user = User::find($body->userId);
