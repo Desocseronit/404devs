@@ -72,4 +72,8 @@ class User{
         $res = Database::instance()->selectRecord('user','*',[['auth_token','=',$token]],1);
         return $res;
     }
+ public static function find($id){
+  return new self(Database::instance()->getOne('users',$id));
+ }
 }
+   
