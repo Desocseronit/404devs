@@ -14,7 +14,8 @@ class Response{
 
     public function __construct($code , $body = []){
         $this->_code = $code;
-        $this->_body = new Collection($body);
+        if($body instanceof Collection) $this->_body = $body;
+        else $this->_body = new Collection($body);
     }
 
     public function send(){
