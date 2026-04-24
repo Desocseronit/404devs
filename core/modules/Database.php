@@ -236,5 +236,3 @@ class Database{
         ];
     }
 }
-
->>>>>>> b26ed5b55b4a605ea5e4b42e9d9168586229e0b9:Database.php
