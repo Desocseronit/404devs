@@ -1,4 +1,5 @@
 <?php  namespace core\actions;
+use core\{Image};
 
 class NewImages{
     public function execute($req){
