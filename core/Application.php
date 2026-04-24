@@ -3,9 +3,7 @@
 class Application{
     static public function runAction(){
         self::requireFiles(__DIR__ .'/modules/');
-        echo '<pre>';
         $req = new Request();
-        var_dump($req);
         $actionName = $req->getInfo()->params->getValue()->action->getvalue();
         require_once('.\\actions\\'.$actionName.'.php');
         $className = "core\\actions\\" . $actionName;
