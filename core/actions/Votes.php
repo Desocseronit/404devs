@@ -35,5 +35,6 @@ class Votes{
             }
             else{$res = new Response(500);}
         }
+        $res->send();
     }
 }
