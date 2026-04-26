@@ -46,6 +46,18 @@
  * - пример: getOne('users', 5) - получить по id
  * - пример: getOne('users', 'john@example.com', 'email') - получить по email
  * - возвращает: Collection с одной записью (доступ через [0])
+ * 
+ * @incrementField($tablename, $field, $value, $where, $whereParams = [])
+ * - отвечает за атомарное увеличение или уменьшение числового поля в БД
+ * - вызов: (имя таблицы,
+ *           имя числового поля для изменения,
+ *           значение инкремента (положительное для увеличения, отрицательное для уменьшения),
+ *           строка условия для WHERE с плейсхолдерами ('id = $1 AND age = $2'),
+ *           массив значений для плейсхолдеров [5, 18])
+ * - пример: incrementField('posts', 'votes', 1, 'id = $1', [1]) - увеличить votes на 1
+ * - пример: incrementField('posts', 'votes', -1, 'id = $1', [1]) - уменьшить votes на 1
+ * - пример: incrementField('users', 'rating', 10, 'level = $1 AND status = $2', [5, 'active']) - увеличить rating на 10
+ * - возвращает: true/false
  */
 
 class Database{
@@ -191,6 +203,17 @@ class Database{
         $record = pg_fetch_assoc($records);
         $res = new Record($tablename , $record['id'] , $record);
         return $res;
+    }
+
+    public function incrementField($tablename, $field, $value, $where, $whereParams = []) {
+        $tablename = $this->tableNameValidator($tablename, true);
+        $field = $this->fieldValidator($field);
+
+        $value = (int)$value;
+        $sql = "UPDATE $tablename SET $field = $field + $value WHERE $where";
+
+        $result = $this->query($sql, $whereParams);
+        return $result ? $result: false;
     }
 
     private function tableNameValidator($tabName, $isWrite = false){
