@@ -9,10 +9,10 @@
 
 <body>
     <form id="uploadForm">
-        <input type="file" name="image" accept="image/*" >
-        <input type="text" name="userId" value="1">
-        <input type="text" name="postId" placeholder="post">
-        <input type="text" name="text" placeholder="Text">
+        <!-- <input type="file" name="image" accept="image/*" > -->
+        <input type="text" name="answerId">
+        <!-- <input type="text" name="postId" placeholder="post"> -->
+        <input type="number" name="value" placeholder="">
         <button type="submit">Submit</button>
     </form>
 </body>
@@ -29,17 +29,15 @@
         console.log(Object.fromEntries(formData));
 
         try {
-            const response = await fetch('http://404devs/core/Application.php?action=NewAnswer', {
+            const response = await fetch('http://404devs/core/Application.php?action=Votes', {
                 method: 'POST',
                 body: formData
             });
 
             const result = await response.text();
             console.log('Ответ:', result);
-            alert('Консоль');
         } catch (error) {
             console.error('трабл с CORS:', error);
-            alert('Ты еблан');
         }
     };
 </script>

@@ -10,7 +10,6 @@ use core\{User};
 
 class NewAnswer{
     public function execute($req){
-        Database::instance('host=26.152.118.24 port=5432 dbname=404devs user=postgres password=1'); 
         $body = $req->getInfo()->body->getValue();
         $user = User::find($body->userId->getValue());
         $post = Post::find($body->postId->getValue());

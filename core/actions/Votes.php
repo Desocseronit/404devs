@@ -7,30 +7,18 @@ use core\{User};
 use core\{Database};
 
 class Votes{
-    public function execute ($req){
+    public function execute ($req){ 
         $body = $req->getInfo()->body->getValue();
-        $user = User::find($body->userId);
-        $res;
+        // $user = User::find($body->userId->getValue()); придумать как сохранять лайки юзеров (1 таблица (id user_id ?post_id ?answer_id) vs 2 таблицы (1) id , user_id, post_id   2) id, user_id , answer_id))
+        $res = null;
         if(isset($body->postId)){
-            $postId = $body->post_id;
-            if(Database::instance()->updateRecord(
-                'post',
-                ['votes'=>'votes + '.$body->value],
-                'id = $1',
-                [$postId]
-            )){
+            if(Database::instance()->incrementField('posts', 'votes' , (int)$body->value->getValue(), 'id = $1', [$body->postId->getValue()])){
                 $res = new Response(200);
             }
             else{$res = new Response(500);}
         }
         elseif(isset($body->answerId)){
-            $answerId = $body->answerId;
-            if(Database::instance()->updateRecord(
-                'answers',
-                ['votes'=>'votes + '.$body->value],
-                'id = $1',
-                [$answerId]
-            )){
+            if(Database::instance()->incrementField('answers', 'votes' , (int)$body->value->getValue(), 'id = $1', [$body->answerId->getValue()])){
                 $res = new Response(200);
             }
             else{$res = new Response(500);}
