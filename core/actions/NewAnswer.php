@@ -17,7 +17,7 @@ class NewAnswer{
         }
         $answerData = new AnswerData(user: $user , post: $post , text: $body->text , images_ids: $imgs);
         $answer = Answer::create($answerData);
-        $response = new Response(201 , ['answer' = $answer]);
+        $response = new Response(201 , ['answer' => $answer]);
         $response->send();
     }
 }

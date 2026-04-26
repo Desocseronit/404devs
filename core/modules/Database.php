@@ -186,16 +186,11 @@ class Database{
         $tablename = $this->tableNameValidator($tablename);
         $idField = $this->fieldValidator($idField);
         
-        $sql = "SELECT * FROM $tablename WHERE $idField = $1";
+        $sql = "SELECT * FROM $tablename WHERE $idField = $1 LIMIT 1";
         $records = $this->query($sql, [$id]);
-        $res = [];
-        while ($record = pg_fetch_assoc($records)){
-            $res[] = new Record($tablename , $record['id'] , $record);
-        }
-        $res = new Collection($res);
+        $record = pg_fetch_assoc($records);
+        $res = new Record($tablename , $record['id'] , $record);
         return $res;
-
-
     }
 
     private function tableNameValidator($tabName, $isWrite = false){

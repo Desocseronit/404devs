@@ -5,7 +5,7 @@ class NewImages{
     public function execute($req){
         $ids = [];
         foreach($req->getInfo()->files->getValue()->items() as $file){
-            $img = new Image($file);
+            $img = new Image($file->getValue());
             $ids[] = $img->id;
         }
         return $ids;
