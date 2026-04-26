@@ -49,9 +49,9 @@ class User{
     }
     
     public function authByCredentials($username,$password){
-        $res = Database::instance()->GetOne('users',$username,'name')
-        if (isset($res->{0})){
-            $userRecord = $res->{0}; 
+        $res = Database::instance()->GetOne('users',$username,'name');
+        if($res){
+            $userRecord = $res; 
         } 
         if(password_verify($password,$userRecord->password_hash)){
             $newToken = bin2hex(random_bytes(32));
@@ -73,7 +73,7 @@ class User{
             return false;
         }
         $token = $_COOKIE['identify'];
-        $res = Database::instance()->getOne('users',$token,'auth_token')
+        $res = Database::instance()->getOne('users',$token,'auth_token');
         return $res;
     }
     public function changeAvatar(Image $img){

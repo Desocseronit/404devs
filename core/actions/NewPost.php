@@ -11,11 +11,9 @@ use core\{User};
 class NewPost{
     public function execute($req){
         $body = $req->getInfo()->body->getValue();
-        //  echo '<pre>';
-        // var_dump($body->userId->getValue());
         $user = User::find($body->userId->getValue());
         $imgs = [];
-        if($req->getInfo()->files){
+        if($req->getInfo()->files->getValue()){
             $imgs = new NewImages();
             $imgs = $imgs->execute($req);
         }
