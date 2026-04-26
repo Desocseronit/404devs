@@ -4,7 +4,7 @@ use core\{Response};
 use core\{User};
 use core\{Database};
 
-class RegNewUser($req){
+class RegNewUser{
     public function execute($req){
         $body = $req->getInfo()->body->getValue();
 
