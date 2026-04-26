@@ -15,7 +15,7 @@ class Image{
         $day = $date->format('d');
         $name = md5($file['name'].microtime());
         $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
-        $uploadDir = "uploads/{$year}/{$month}/{$day}";
+        $uploadDir = "../uploads/{$year}/{$month}/{$day}";
 
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0755, true);
@@ -23,7 +23,7 @@ class Image{
 
         $uploadDir .= "/{$name}.$extension";
         
-        move_uploaded_file($file['tmp_name'], $uploadDir);
+        move_uploaded_file($file['tmp_name'], __DIR__ .'/../'.$uploadDir);
 
         $this->record = Database::instance()->insertRecord('images' , ['path' => $uploadDir]);
 
