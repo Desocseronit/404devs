@@ -1,4 +1,3 @@
-
 <?php namespace core;
 /**
  * Экземпляр класса User представляет собой пользователя
@@ -6,6 +5,15 @@
  * @authByCredentials => аутентификация по куки
  * @authByCookies => аутентификация по паролю
  */
+class UserData {
+    public function __construct(
+        public readonly string $name,
+        public readonly string $password,
+        public readonly string $email,
+        public readonly string $show_name,
+        public readonly string $avatar_path
+    ) {}
+}
 class User{
     public $record;
 
@@ -23,29 +31,25 @@ class User{
         return $value;
     }
 
-    static public function reg($username,$password,$email){
-        $hash_password = md5($password);
-        $token = md5("$username",bin2hex(random_bytes(32)));
-        $record = Database::instance()->insertRecord('user',[
-            'name'=>$username,
-            'password_hash'=>$hash_password,
-            'email'=>$email
-        ]);
-        if($record){
-            Database::instance()->updateRecord(
-                'user',
-                ['auth_token'=>$token],
-                'id=$1',
-                [$record->id]
-            );
-            setcookie("identify",$token,time()+60*60*24*14);
-        }
-        $user = new User(Database::instance->selectRecord('user', '*' , [['id', '=' , $record->id]]));
-        return $user;
+    static public function reg(UserData $data){
+        $hash_password = password_hash($data->password,PASSWORD_DEFAULT);
+        $token = md5("$data->name" .bin2hex(random_bytes(32)));
+        $userData = [];
+        $userData['name'] = $data->name;
+        $userData['show_name'] = $data->show_name;
+        $userData['password_hash']= $hash_password;
+        $userData['email'] = $data->email;
+        $userData['avatar_path'] = $data->avatar_path;
+        $userData['created_data'] = date('Y-m-d H:i:s');
+        $userData['auth_token']=$token;
+        $userData['status_id'] = 1;
+        $user = Database::instance()->insertRecord("users",$userData);
+        setcookie("identify",$token,time()+60*60*24*14);
+        return new self($user);
     }
     
     public function authByCredentials($username,$password){
-        $res = Database::instance()->selectRecord('user','*',[['username','=',$username]],1);
+        $res = Database::instance()->GetOne('users',$username,'name')
         if (isset($res->{0})){
             $userRecord = $res->{0}; 
         } 
@@ -58,8 +62,8 @@ class User{
                 [$userRecord->id]
             );
             setcookie("identify",$newToken,time()+60*60*24*14);
-            $this->record = $userRecord;
-            return true;
+            return $userRecord;
+            
         }
         return false;        
     }
@@ -69,7 +73,7 @@ class User{
             return false;
         }
         $token = $_COOKIE['identify'];
-        $res = Database::instance()->selectRecord('user','*',[['auth_token','=',$token]],1);
+        $res = Database::instance()->getOne('users',$token,'auth_token')
         return $res;
     }
     public function changeAvatar(Image $img){
@@ -77,6 +81,19 @@ class User{
             'user_id' => $this->id,
             "avatar" => $img->path
         ]);
+    }
+    public function logout(){
+        if($this->record && isset($this->record->id)){
+            Database::instance()->updateRecord(
+                'users',
+                ['auth_token'=>null],
+                'id = $1',
+                [$this->record->id]
+            );
+        }
+        setcookie("identify", "", time() - 3600);
+       
+        return true;
     }
  public static function find($id){
   return new self(Database::instance()->getOne('users',$id));
