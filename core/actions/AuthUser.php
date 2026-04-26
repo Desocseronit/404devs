@@ -17,9 +17,8 @@ class AuthUser{
             $res = new Response(200 , ['user' => $userByPassword]);
         } 
         else {
-            $res = new Response(401 , ['error' => 'User not authenticated']);
+            $res = new Response(401);
         }
-        
         return $res;    
     }
 }
