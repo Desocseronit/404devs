@@ -1,21 +1,25 @@
 <?php namespace core\actions;
+require_once('NewImages.php');
+
 use core\{Response};
 use core\{Post};
 use core\{Database};
 use core\{Answer};
+use core\{AnswerData};
 use core\{User};
 
 class NewAnswer{
     public function execute($req){
+        Database::instance('host=26.152.118.24 port=5432 dbname=404devs user=postgres password=1'); 
         $body = $req->getInfo()->body->getValue();
-        $user = User::find($body->userId);
-        $post = Post::find($body->postId);
-        $imgs;
-        if($req->getInfo()->files){
+        $user = User::find($body->userId->getValue());
+        $post = Post::find($body->postId->getValue());
+        $imgs = [];
+        if($req->getInfo()->files->getValue()){
             $imgs = new NewImages();
             $imgs = $imgs->execute($req);
         }
-        $answerData = new AnswerData(user: $user , post: $post , text: $body->text , images_ids: $imgs);
+        $answerData = new AnswerData(user: $user , post: $post , text: $body->text->getValue() , images_ids: $imgs);
         $answer = Answer::create($answerData);
         $response = new Response(201 , ['answer' => $answer]);
         $response->send();

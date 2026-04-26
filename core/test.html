@@ -11,10 +11,8 @@
     <form id="uploadForm">
         <input type="file" name="image" accept="image/*" >
         <input type="text" name="userId" value="1">
-        <input type="text" name="title" placeholder="Title">
+        <input type="text" name="postId" placeholder="post">
         <input type="text" name="text" placeholder="Text">
-        <input type="text" name="category_id" value="1">
-        <input type="text" name="level_id" value="1">
         <button type="submit">Submit</button>
     </form>
 </body>
@@ -31,7 +29,7 @@
         console.log(Object.fromEntries(formData));
 
         try {
-            const response = await fetch('http://404devs/core/Application.php?action=NewPost', {
+            const response = await fetch('http://404devs/core/Application.php?action=NewAnswer', {
                 method: 'POST',
                 body: formData
             });
