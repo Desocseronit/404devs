@@ -17,8 +17,8 @@ class Image{
         $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
         $uploadDir = "uploads/{$year}/{$month}/{$day}";
 
-        if (!is_dir('/../../'.$uploadDir)) {
-            mkdir('/../../'.$uploadDir, 0755, true);
+        if (!is_dir(__DIR__.'/../../'.$uploadDir)) {
+            mkdir(__DIR__.'/../../'.$uploadDir, 0755, true);
         }
 
         $uploadDir .= "/{$name}.$extension";
