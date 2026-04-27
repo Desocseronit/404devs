@@ -1,12 +1,7 @@
 <?php namespace core\actions;
 require_once('NewImages.php');
 
-use core\{Response};
-use core\{Post};
-use core\{Database};
-use core\{Answer};
-use core\{AnswerData};
-use core\{User};
+use core\{Response,Post,Database,Answer,AnswerData,User};
 
 class NewAnswer{
     public function execute($req){

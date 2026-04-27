@@ -1,19 +1,19 @@
 <?php namespace core\actions;
-
 use core\{Response,User,Database};
 
-
-class RegNewUser{
+class ModifyUser{
     public function execute($req){
+        $res;
         $body = $req->getInfo()->body->getValue();
+        $user = User::find($body->UserId->getValue());
 
-        $user = User::reg($body->username, $body->password , $body->email);
         if($user){
-            $res = new Response(201 , ['user' => $user, ]);
+            $user->modify();
+            return New Response([200])
         }
         else{
-            $res = new Response(400);
+            return New Response([400],{'message'''})
         }
-        $res->send();
+        
     }
 }

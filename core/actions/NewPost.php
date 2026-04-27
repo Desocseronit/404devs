@@ -1,11 +1,8 @@
 <?php namespace core\actions;
 require_once('NewImages.php');
 
-use core\{Response};
-use core\{Database};
-use core\{Post};
-use core\{PostData};
-use core\{User};
+use core\{Response,Database,Post,PostData,User};
+
 
 
 class NewPost{

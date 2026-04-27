@@ -1,10 +1,7 @@
 <?php namespace core\actions;
 
-use core\{Response};
-use core\{Post};
-use core\{Answer};
-use core\{User};
-use core\{Database};
+use core\{Response,Post,Answer,User,Database};
+
 
 class Votes{
     public function execute ($req){ 
