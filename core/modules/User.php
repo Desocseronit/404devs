@@ -1,9 +1,13 @@
 <?php namespace core;
 /**
  * Экземпляр класса User представляет собой пользователя
- * @reg => регестрирует нового пользователя и заносит данные в бд
+ * @reg => регистрирует нового пользователя и заносит данные в бд
  * @authByCredentials => аутентификация по куки
  * @authByCookies => аутентификация по паролю
+ * @changeAvatar => смена аватара
+ * @logOut => выход из аккаунта
+ * @delete => изменение статуса на удален
+ * 
  */
 class UserData {
     public function __construct(
@@ -82,7 +86,7 @@ class User{
             "avatar" => $img->path
         ]);
     }
-    public function logout(){
+    public function logOut(){
         if($this->record && isset($this->record->id)){
             Database::instance()->updateRecord(
                 'users',
@@ -95,7 +99,32 @@ class User{
        
         return true;
     }
- public static function find($id){
-  return new self(Database::instance()->getOne('users',$id));
- }
+    public function delete(){
+        if($this->record && isset($this->record->id)){
+            DataBase::instance()->updateRecord(
+                'users',
+                ['status_id' => 4],
+                'id = $1',
+                [$this->record->id]
+            );
+        }
+        return true;
+    }
+    public function modify($newData){
+        if(isset($newData['newAvatar'])){
+            $this->changeAvatar($newData['newAvatar']);
+            unset($newData['newAvatar']);
+        }
+        if(!empty($newData)){
+            Database::instance()->updateRecord(
+                'users',
+                $newData,
+                'id = $1',
+                [$this->id]
+            );
+        }        
+    }
+    public static function find($id){
+        return new self(Database::instance()->getOne('users',$id));
+    }
 }
