@@ -40,4 +40,8 @@ class Image{
     public function getSize(){
         return filesize($this->path);
     }
+
+    public function delete(){
+        Database::deleteRecord('images', 'path = $1', [$this->path]);
+    }
 }
