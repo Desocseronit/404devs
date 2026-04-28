@@ -41,12 +41,13 @@ class Image{
         return filesize($this->path);
     }
 
-    public static function delete($param , $val){
-        Database::deleteRecord('images', "$param = $1", [$val]);
-        unlink($this->path);
+    public static function delete($id){
+        $path = Database::instance()->getOne('images', $id)->path;
+        Database::instance()->deleteRecord('images', "id = $1", [$id]);
+        unlink(__DIR__.'/../../'.$path);
     }
 
     public static function findByName($name){
-        return Database::instance->getOne('images', $name , 'name')->id;
+        return Database::instance()->getOne('images', $name , 'name')->id;
     }
 }
