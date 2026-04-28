@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .register-form{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            justify-content: center;
+            
+        }
+        .register{
+            display: flex;
+            margin-top: 10px;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+
+    </header>
+    <main>
+        <form method="POST" >
+            <div class="register-form">
+                <div class="email">
+                    <input type="email" id="email" name="email" placeholder="Почта">
+                </div>
+                <div class="login">
+                    <input type="text" id="username" name="username" placeholder="Логин">
+                </div>
+                <div class="password">
+                    <input type="password" id="password" name="password" placeholder="Пароль">
+                </div>
+                <div class="password-confirm">
+                    <input type="password" id="password-confirm" placeholder="Пароль">
+                </div>        
+            </div>
+            <div class="register">
+                <button id="register" type="submit">Регистрация</button>
+            </div>
+        </form>      
+    </main>
+    <footer>
+
+    </footer>
+</body>
+<script>
+    
+    
+    document.querySelector('form').addEventListener('submit',e=>{
+        e.preventDefault()
+        if(document.getElementById('password').value !== document.getElementById('password-confirm').value){
+            alert('пароли не совпадают')
+            return
+        }
+        let formData = new FormData(e.target)
+        fetch('http://404devs/core/Application.php?action=RegNewUser',{
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body: formData
+        })
+    })
+</script>
+</html>
