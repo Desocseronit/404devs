@@ -25,7 +25,7 @@ class Image{
         
         move_uploaded_file($file['tmp_name'], __DIR__.'/../../'.$uploadDir);
 
-        $this->record = Database::instance()->insertRecord('images' , ['path' => $uploadDir]);
+        $this->record = Database::instance()->insertRecord('images' , ['path' => $uploadDir , 'name' => "{$name}.$extension"]);
 
         foreach($this->record->attributes as $key => $val) { 
             $this->$key = &$this->record->$key;
@@ -41,7 +41,11 @@ class Image{
         return filesize($this->path);
     }
 
-    public function delete(){
-        Database::deleteRecord('images', 'path = $1', [$this->path]);
+    public static function delete($param , $val){
+        Database::deleteRecord('images', "$param = $1", [$val]);
+    }
+
+    public static function findByName($name){
+        return Database::instance->getOne('images', $name , 'name')->id;
     }
 }
