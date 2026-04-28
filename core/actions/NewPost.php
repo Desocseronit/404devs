@@ -10,7 +10,7 @@ class NewPost{
         $body = $req->getInfo()->body->getValue();
         $user = User::find($body->userId->getValue());
         $imgs = [];
-        if($req->getInfo()->files->getValue()){
+        if($req->getInfo()->files->getValue()->items()){
             $imgs = new NewImages();
             $imgs = $imgs->execute($req);
         }
