@@ -33,7 +33,8 @@ class Request
         }
 
         if($_FILES){
-            $requestInfo['files'] = new Collection($_FILES);
+            $normalizedFiles = $this->normalizeFiles($_FILES);
+            $requestInfo['files'] = new Collection($normalizedFiles);
         }
 
         if($_GET){
@@ -45,5 +46,35 @@ class Request
 
     public function getInfo(){
         return $this->_requestInfo;
+    }
+
+    private function normalizeFiles($files){
+        $result = [];
+        foreach ($files as $key => $file) {
+            if (is_array($file['name'])) {
+                foreach ($file['name'] as $index => $name) {
+                    if ($file['error'][$index] === UPLOAD_ERR_OK) {
+                        $result[$key][$index] = [
+                            'name' => $name,
+                            'tmp_name' => $file['tmp_name'][$index],
+                            'error' => $file['error'][$index],
+                            'size' => $file['size'][$index],
+                            'type' => $file['type'][$index]
+                        ];
+                    }
+                }
+            } else {
+                if ($file['error'] === UPLOAD_ERR_OK) {
+                    $result[$key][0] = [
+                        'name' => $file['name'],
+                        'tmp_name' => $file['tmp_name'],
+                        'error' => $file['error'],
+                        'size' => $file['size'],
+                        'type' => $file['type']
+                    ];
+                }
+            }
+        }
+        return $result;
     }
 }
