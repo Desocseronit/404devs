@@ -53,4 +53,8 @@ class Post{
     public static function find($id){
         return new self(Database::instance()->getOne('posts' , $id));
     }
+
+    public function delete(){
+        return Database::instance()->deleteRecord('posts' , 'id = $1' , [$this->id]);
+    }
 }

@@ -43,6 +43,7 @@ class Image{
 
     public static function delete($param , $val){
         Database::deleteRecord('images', "$param = $1", [$val]);
+        unlink($this->path);
     }
 
     public static function findByName($name){

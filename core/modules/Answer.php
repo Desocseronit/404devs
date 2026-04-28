@@ -47,4 +47,8 @@ class Answer{
     public static function find($id){
         return new self(Database::instance()->getOne('answers' , $id));
     }
+
+    public function delete(){
+        return Database::instance()->deleteRecord('answers' , 'id = $1' , [$this->id]);
+    }
 }
