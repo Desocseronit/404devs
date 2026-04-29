@@ -113,7 +113,7 @@ class Database{
         
         $limitClause = $limit ? ' LIMIT ' . (int)$limit : '';
         
-        $sql = "SELECT $attributes FROM $tablename $whereClause $limitClause";
+        $sql = "SELECT id , $attributes FROM $tablename $whereClause $limitClause";
         $records = $this->query($sql, $params);
         $res = [];
         while ($record = pg_fetch_assoc($records)){
