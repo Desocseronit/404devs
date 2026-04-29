@@ -50,4 +50,8 @@ class Image{
     public static function findByName($name){
         return Database::instance()->getOne('images', $name , 'name')->id;
     }
+
+    public static function findById($id){
+        return Database::instance()->getOne('images' , $id);
+    }
 }

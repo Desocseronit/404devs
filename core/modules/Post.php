@@ -57,4 +57,24 @@ class Post{
     public function delete(){
         return Database::instance()->deleteRecord('posts' , 'id = $1' , [$this->id]);
     }
+
+    public function addImage($imgId){
+        return Database::instance()->insertRecord('post_images', ['post_id' => $this->id , 'img_id' => $imgId]);
+    }
+
+    public function getImages(){
+        return Database::instance()->selectRecord('post_images' , 'img_id' , [['post_id', '=' , $this->id]]);
+    }
+
+    public function isAuthor($userId){
+        return $this->userId == $userId;
+    }
+
+    public function getInfo(){
+        $vars = get_object_vars($this);
+        unset($vars['record']);
+        unset($vars['id']);
+        unset($vars['user_id']);
+        return $vars;
+    }
 }

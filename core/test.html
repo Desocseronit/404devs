@@ -9,11 +9,13 @@
 
 <body>
     <form id="uploadForm">
-        <!-- <input type="file" name="image" accept="image/*" > -->
+        <input type="file" name="image[]" accept="image/*" multiple>
         <!-- <input type="text" name="answerId"> -->
-        <input type="text" name="userId">
+        <input type="text" name="userId" placeholder="user">
         <input type="text" name="postId" placeholder="post">
-        <input type="number" name="value" placeholder="">
+        <input type="text" name="title" placeholder="title">
+        <input type="text" name="text" placeholder="text">
+        <input type="text" name="newImages" placeholder="imgName,imgName">
         <button type="submit">Submit</button>
     </form>
 </body>
@@ -30,7 +32,7 @@
         console.log(Object.fromEntries(formData));
 
         try {
-            const response = await fetch('http://404devs/core/Application.php?action=Votes', {
+            const response = await fetch('http://404devs/core/Application.php?action=ChangePost', {
                 method: 'POST',
                 body: formData
             });
