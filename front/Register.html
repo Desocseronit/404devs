@@ -62,15 +62,9 @@
             return
         }
         let formData = new FormData(e.target)
-        let jsonData = {
-            username: formData.get('username'),
-            email: formData.get('email'),
-            password: formData.get('password')
-        }
         fetch('http://404devs/core/Application.php?action=RegNewUser',{
             method:'POST',
-            headers:{'Content-Type':'application/json'},
-            body: JSON.stringify(jsonData)
+            body:formData
         })
     })
 </script>
