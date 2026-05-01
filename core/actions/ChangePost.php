@@ -8,9 +8,6 @@ use core\{Response, Database, Post, Image};
 class ChangePost {
     public function execute($req){
         $body = $req->getInfo()->body->getValue();
-        // в пизду все проверки
-        //мне прилетает в newImages только имена картинок которые были до этого в посте, после я удаляю все чьих имен нет в списке
-        // новые картинки все лежат у меня в files
         $post = Post::find($body->postId->getValue());
         if($body->userId->getValue() != $post->user_id){
             $resp = new Response(403);
@@ -26,11 +23,11 @@ class ChangePost {
         }
         $imagesToDelete = array_diff($originalImages , explode(',',$body->newImages->getValue()));
 
-        if(isset($req->files)){
+        if(isset($req->getInfo()->files)){
             $newImageAction = new NewImages();
             $newImageAction = $newImageAction->execute($req);
             foreach($newImageAction as $img){
-                $post->addImage($img)->path;
+                $post->addImage($img);
             }
         }
         

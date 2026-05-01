@@ -74,7 +74,6 @@ class Post{
         $vars = get_object_vars($this);
         unset($vars['record']);
         unset($vars['id']);
-        unset($vars['user_id']);
         return $vars;
     }
 }

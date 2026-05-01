@@ -51,4 +51,19 @@ class Answer{
     public function delete(){
         return Database::instance()->deleteRecord('answers' , 'id = $1' , [$this->id]);
     }
+
+    public function getImages(){
+        return Database::instance()->selectRecord('answer_images' , 'img_id' , [['answer_id', '=' , $this->id]]);
+    }
+
+    public function addImage($imgId){
+        return Database::instance()->insertRecord('answer_images', ['answer_id' => $this->id , 'img_id' => $imgId]);
+    }
+
+    public function getInfo(){
+        $vars = get_object_vars($this);
+        unset($vars['record']);
+        unset($vars['id']);
+        return $vars;
+    }
 }
