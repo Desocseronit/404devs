@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-        .register-form{
+        .auth-form{
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -13,7 +13,7 @@
             justify-content: center;
             
         }
-        .register{
+        .auth{
             display: flex;
             margin-top: 10px;
             justify-content: center;
@@ -29,23 +29,18 @@
     </header>
     <main>
         <form method="POST" >
-            <div class="register-form">
-                <div class="email">
-                    <input type="email" id="email" name="email" placeholder="Почта">
-                </div>
+            <div class="auth-form">
                 <div class="login">
                     <input type="text" id="username" name="username" placeholder="Логин">
                 </div>
                 <div class="password">
                     <input type="password" id="password" name="password" placeholder="Пароль">
                 </div>
-                <div class="password-confirm">
-                    <input type="password" id="password-confirm" placeholder="Пароль">
-                </div>        
             </div>
-            <div class="register">
-                <button id="register" type="submit">Регистрация</button>
+            <div class="auth">
+                <button id="auth" type="submit">Вход</button>
             </div>
+            <p class="message"></p>
         </form>      
     </main>
     <footer>
@@ -57,20 +52,20 @@
     
     document.querySelector('form').addEventListener('submit',e=>{
         e.preventDefault()
-        if(document.getElementById('password').value !== document.getElementById('password-confirm').value){
-            alert('пароли не совпадают')
-            return
-        }
         let formData = new FormData(e.target)
-        let jsonData = {
-            username: formData.get('username'),
-            email: formData.get('email'),
-            password: formData.get('password')
-        }
-        fetch('http://404devs/core/Application.php?action=RegNewUser',{
+         fetch('http://404devs/core/Application.php?action=AuthUser',{
             method:'POST',
-            headers:{'Content-Type':'application/json'},
-            body: JSON.stringify(jsonData)
+            body: formData
+        })
+        .then(resp=>{
+            if(resp.status == 200){
+               return resp.json().then(data=>{
+                window.location.href()
+               }) 
+            }
+            else{
+                document.querySelector('.message').innerText = 'Логин или пароль неверен'
+            }
         })
     })
 </script>
