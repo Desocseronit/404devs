@@ -14,7 +14,8 @@ class Response{
 
     public function __construct($code , $body = []){
         $this->_code = $code;
-        $this->_body = new Collection($body);
+        if($body instanceof Collection) $this->_body = $body;
+        else $this->_body = new Collection($body);
     }
 
     public function send(){
@@ -23,5 +24,10 @@ class Response{
             'code' => $this->_code,
             'body' => $this->_body->stringify()  
         ]);
+    }
+
+    public function redirect($url, $statusCode = 302) {
+        header('Location: ' . $url, true, $statusCode);
+        $this->send();
     }
 }
