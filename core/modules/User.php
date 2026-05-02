@@ -53,7 +53,7 @@ class User{
     }
     
     public function authByCredentials($username,$password){
-        $res = Database::instance()->GetOne('users',$username,'name');
+        $res = Database::instance()->getOne('users',$username,'name');
         if($res){
             $userRecord = $res; 
         } 
