@@ -25,4 +25,9 @@ class Response{
             'body' => $this->_body->stringify()  
         ]);
     }
+
+    public function redirect($url, $statusCode = 302) {
+        header('Location: ' . $url, true, $statusCode);
+        $this->send();
+    }
 }
