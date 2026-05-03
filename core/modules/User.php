@@ -52,34 +52,35 @@ class User{
         return new self($user);
     }
     
-    public function authByCredentials($username,$password){
+    public static function authByCredentials($username,$password){
         $res = Database::instance()->getOne('users',$username,'name');
-        if($res){
-            $userRecord = $res; 
-        } 
+        if(!$res){
+            return false; 
+        }
+        $userRecord = $res;  
         if(password_verify($password,$userRecord->password_hash)){
             $newToken = bin2hex(random_bytes(32));
             Database::instance()->updateRecord(
-                'user',
+                'users',
                 ['auth_token'=>$newToken],
                 'id=$1',
                 [$userRecord->id]
             );
             setcookie("identify",$newToken,time()+60*60*24*14);
-            return $userRecord;
-            
+            return new self(Database::instance()->getOne('users',$username,'name')); 
         }
-        return false;        
+        return false;   
     }
     
-    public function authByCookies(){
+    public static function authByCookies(){
         if(!isset($_COOKIE['identify'])){
             return false;
         }
         $token = $_COOKIE['identify'];
         $res = Database::instance()->getOne('users',$token,'auth_token');
-        return $res;
+        return new self($res);
     }
+
     public function changeAvatar(Image $img){
         $this->id::instance()->insertRecord('user_avatar',[
             'user_id' => $this->id,

@@ -20,10 +20,11 @@ class Response{
 
     public function send(){
         http_response_code($this->_code);
-        echo json_encode([
-            'code' => $this->_code,
-            'body' => $this->_body->stringify()  
-        ]);
+        if($this->_body->items()){
+            echo json_encode([
+                'body' => $this->_body->stringify()  
+            ]);
+        }
     }
 
     public function redirect($url, $statusCode = 302) {

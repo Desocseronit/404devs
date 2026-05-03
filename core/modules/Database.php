@@ -201,6 +201,9 @@ class Database{
         $sql = "SELECT * FROM $tablename WHERE $idField = $1 LIMIT 1";
         $records = $this->query($sql, [$id]);
         $record = pg_fetch_assoc($records);
+        if(!$record){
+            return false;
+        }
         $res = new Record($tablename , $record['id'] , $record);
         return $res;
     }

@@ -2,6 +2,7 @@
 
 class Application{
     static $user;
+    static $request;
     // static public function runAction(){
         
     //     $req = new Request();
@@ -18,7 +19,8 @@ class Application{
     //     }
     // }
     static public function executePath(){
-        $request = new Request();
+        self::authUser();
+        $request = self::$request;
         $requestType = $request->getInfo()->type->getValue();
         $requestURI = $request->getInfo()->uri->getValue();
         $requestParams = null;
@@ -75,9 +77,22 @@ class Application{
             }
         }
     }
+
+    static public function authUser(){
+        $userInctance = User::authByCookies();
+        if($userInctance) Application::$user = $userInctance;
+        else return false;
+    }
+
+    static public function createRequest(){
+        if(!self::$request){
+            self::$request = new Request();
+        }
+        return self::$request;
+    }
 }
 
-
 Application::requireFiles(__DIR__ .'/modules/');
+Application::createRequest();
+Database::instance('host = 26.152.118.24 port = 5432 dbname = 404devs user = postgres password = 1');
 
-Application::executePath();

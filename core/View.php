@@ -6,13 +6,12 @@ class View{
     static public function renderView($data, $path = '/main.php'){
         $resultData = array_merge($data , self::$globalData);
         extract($resultData);
-        // if(!Application::$user){
-        //     хедер без профиля
-        // }
-        // else{
-        //     хедер с профилем
-        // }
-        include(self::$path.'/guestHeader.php');
+        if(!Application::$user){
+            include(self::$path.'/guestHeader.php');
+        }
+        else{
+            include(self::$path.'/header.php');
+        }
         include(self::$path.$path);
         include(self::$path.'/footer.html');
     }

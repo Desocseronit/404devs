@@ -1,25 +1,14 @@
 <?php namespace core\actions;
 
-use core\{Response,User};
+use core\{Response,User,Application};
 
 class AuthUser{
-    public function execute($req){
-        $body = $req->getInfo()->body->getValue();
-
-        $res;
-        $userByPassword = User::find($body->UserId->getValue());
-        $user = User::find($body->UserId->getValue());
+    public function execute(){
+        $body = Application::$request->getInfo()->body->getValue();
+        $user = User::authByCredentials($body->username->getValue() , $body->password->getValue());
         if($user){
-            $user->authByCokies()
-            $res = new Response(200 , ['user' => $user]);
+            return $user->record->stringify();
         }
-        elseif($userByPassword){
-            $userByPassword->authByCredentials();
-            $res = new Response(200 , ['user' => $userByPassword]);
-        } 
-        else {
-            $res = new Response(401);
-        }
-        return $res;    
+        return false;
     }
 }

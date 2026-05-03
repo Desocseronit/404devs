@@ -39,4 +39,11 @@ class Record{
             Database::instance()->updateRecord($this->_tableName , $newValues , "id = $1", [$this->_id]);
         }
     }
+
+    public function stringify(){
+        $vars = get_object_vars($this);
+        unset($vars['attributes']);
+        unset($vars['id']);
+        return json_encode($vars);
+    }
 }
