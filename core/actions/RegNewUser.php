@@ -1,19 +1,16 @@
 <?php namespace core\actions;
 
-use core\{Response,User,Database};
+use core\{Application,Response,User, UserData,Database};
 
 
 class RegNewUser{
-    public function execute($req){
-        $body = $req->getInfo()->body->getValue();
-
-        $user = User::reg($body->username, $body->password , $body->email);
+    public function execute(){
+        $requestBody = Application::$request->getInfo()->body->getValue();
+        $userData = new UserData(name: $requestBody->username->getValue() , password: $requestBody->password->getValue() , email: $requestBody->email->getValue());
+        $user = User::reg($userData);
         if($user){
-            $res = new Response(201 , ['user' => $user, ]);
+            return $user->record->stringify();
         }
-        else{
-            $res = new Response(400);
-        }
-        $res->send();
+        return false;
     }
 }

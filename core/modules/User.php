@@ -14,8 +14,6 @@ class UserData {
         public readonly string $name,
         public readonly string $password,
         public readonly string $email,
-        public readonly string $show_name,
-        public readonly string $avatar_path
     ) {}
 }
 class User{
@@ -40,10 +38,9 @@ class User{
         $token = md5("$data->name" .bin2hex(random_bytes(32)));
         $userData = [];
         $userData['name'] = $data->name;
-        $userData['show_name'] = $data->show_name;
+        $userData['show_name'] = $data->name;
         $userData['password_hash']= $hash_password;
         $userData['email'] = $data->email;
-        $userData['avatar_path'] = $data->avatar_path;
         $userData['created_data'] = date('Y-m-d H:i:s');
         $userData['auth_token']=$token;
         $userData['status_id'] = 1;
@@ -78,7 +75,7 @@ class User{
         }
         $token = $_COOKIE['identify'];
         $res = Database::instance()->getOne('users',$token,'auth_token');
-        return new self($res);
+        if($res) return new self($res);
     }
 
     public function changeAvatar(Image $img){
