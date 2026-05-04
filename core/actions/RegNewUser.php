@@ -9,7 +9,7 @@ class RegNewUser{
         $userData = new UserData(name: $requestBody->username->getValue() , password: $requestBody->password->getValue() , email: $requestBody->email->getValue());
         $user = User::reg($userData);
         if($user){
-            return $user->record->stringify();
+            return $user->stringify();
         }
         return false;
     }

@@ -40,10 +40,14 @@ class Record{
         }
     }
 
-    public function stringify(){
+    public function stringify($needStr = false){
         $vars = get_object_vars($this);
         unset($vars['attributes']);
         unset($vars['id']);
-        return json_encode($vars);
+        unset($vars['_tableName']);
+        unset($vars['_id']);
+        unset($vars['_oldAttributes']);
+        if($needStr) return json_encode($vars);
+        return $vars;
     }
 }

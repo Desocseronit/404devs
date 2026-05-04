@@ -23,8 +23,6 @@ class Application{
         $request = self::$request;
         $requestType = $request->getInfo()->type->getValue();
         $requestURI = $request->getInfo()->uri->getValue();
-        $requestParams = null;
-        if(isset($request->getInfo()->params)) $requestParams = $request->getInfo()->params->getValue();
         $allPathes = include 'routeConfig.php';
         if($requestURI->{0}->getValue() == 'main'){
             require_once('controllers/PostsController.php');
@@ -57,7 +55,7 @@ class Application{
                 $errorController->render404();
                 return;
             }
-            require_once('controllers\\UserController.php');
+            require_once('controllers/'.$targetPath['controller'].'.php');
             if(!method_exists('controllers\\'.$targetPath['controller'], $targetPath['view'])){
                 require_once('controllers/ErrorController.php');
                 foreach($allPathes['errors'] as $path){
@@ -78,6 +76,8 @@ class Application{
     }
 
     static private function checkDependencies($targetPath){
+        $requestParams = null;
+        if(isset(Application::$request->getInfo()->params)) $requestParams = Application::$request->getInfo()->params->getValue();
         $params = [];
         foreach($targetPath['dependencies'] as $key => $val){
             if(!isset($requestParams->$key) || !$requestParams->$key->getValue()){

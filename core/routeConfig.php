@@ -8,6 +8,6 @@ return [
     ['type' => 'POST' , 'uri'=>'login' , 'controller' => 'UserController' , 'view' => 'authUser' , 'dependencies' => []],
     ['type' => 'GET' , 'uri'=>'registrate' , 'controller' => 'UserController' , 'view' => 'regRender' , 'dependencies' => []],
     ['type' => 'POST' , 'uri'=>'registrate' , 'controller' => 'UserController' , 'view' => 'regUser' , 'dependencies' => []],
-    ['type' => 'GET' , 'uri'=>'profile' , 'controller' => 'UserController' , 'view' => 'profileRender' , 'dependencies' => ['id'  => Application::$user->id]],
+    ['type' => 'GET' , 'uri'=>'profile' , 'controller' => 'UserController' , 'view' => 'profileRender' , 'dependencies' => ['id'  => Application::$user->id ?? null]],
     'errors' => [['error' => 404 , 'view' => 'render404']]
 ];

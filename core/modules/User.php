@@ -125,4 +125,11 @@ class User{
     public static function find($id){
         return new self(Database::instance()->getOne('users',$id));
     }
+
+    public function stringify(){
+        $vars = $this->record->stringify();
+        unset($vars['password_hash']);
+        unset($vars['auth_token']);
+        return json_encode($vars);
+    }
 }

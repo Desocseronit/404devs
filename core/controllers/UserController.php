@@ -2,7 +2,7 @@
 require_once(__DIR__.'/../View.php');
 require_once(__DIR__.'/../actions/AuthUser.php');
 require_once(__DIR__.'/../actions/RegNewUser.php');
-use core\{Application , Response};
+use core\{Application , Response , User};
 use core\actions\{AuthUser , RegNewUser};
 class UserController{
     public function loginRender(){
@@ -43,7 +43,25 @@ class UserController{
         }
         else{
             \view\View::renderView(['test' => 'regSucces'] , '/test.php');
-            $response = new Response(400);
+            $response = new Response(200);
         }
+        $response -> send();
+    }
+
+    public function profileRender($params){
+        if($params['id'] == null && !Application::$user){
+            Response::redirect('/404err');
+            return;
+        }
+        $userId = $params['id'];
+        $user = null;
+        if(!Application::$user || Application::$user->id != $userId) $user = User::find($userId);
+        else $user = Application::$user;
+        echo '<pre>';
+        var_dump($user->stringify());
+        exit;
+        \view\View::renderView(["userData" => $user->stringify()] , '/profileView.php');
+        $response = new Response(200);
+        $response -> send();
     }
 }
