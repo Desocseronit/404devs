@@ -30,43 +30,64 @@ class Application{
             require_once('controllers/PostsController.php');
             $controllerName = 'controllers\\PostsController';
             $controller = new $controllerName();
-            $params = [];
             $targetPath = $allPathes[0];
-            foreach($targetPath['dependencies'] as $key => $val){
-                if(!isset($requestParams->$key) || !$requestParams->$key->getValue()){
-                    $params[$key] = $val;
-                }
-                else{
-                    $params[$key] = $requestParams->$key->getValue();
-                }
-            }
-            $controller->allPosts($params);
+            $controller->allPosts(Application::checkDependencies($targetPath));
         }
         elseif($requestURI->{0}->getValue() == 'about'){
             echo 'its the about page';
         }
         else{
             $targetPath = null;
-            foreach($allPathes as $path){
+            foreach($allPathes as $key => $path){
+                if(!is_numeric($key)) {
+                    continue;
+                }
                 if($path['type'] == $requestType && $path['uri'] == $requestURI->{0}->getValue()){
                     $targetPath = $path;
                 }
             }
+            if($targetPath == null){
+                require_once('controllers/ErrorController.php');
+                foreach($allPathes['errors'] as $path){
+                    if($path['error'] == 404){
+                        $targetPath = $path;
+                    }
+                }
+                $errorController = new \controllers\ErrorController();
+                $errorController->render404();
+                return;
+            }
+            require_once('controllers\\UserController.php');
+            if(!method_exists('controllers\\'.$targetPath['controller'], $targetPath['view'])){
+                require_once('controllers/ErrorController.php');
+                foreach($allPathes['errors'] as $path){
+                    if($path['error'] == 404){
+                        $targetPath = $path;
+                    }
+                }
+                $errorController = new \controllers\ErrorController();
+                $errorController->render404();
+                return;
+            }
             require_once('controllers/'.$targetPath['controller'].'.php');
             $controllerName = 'controllers\\'.$targetPath['controller'];
             $controller = new $controllerName();
-            $params = [];
-            foreach($targetPath['dependencies'] as $key => $val){
-                if(!isset($requestParams->$key) || !$requestParams->$key->getValue()){
-                    $params[$key] = $val;
-                }
-                else{
-                    $params[$key] = $requestParams->$key->getValue();
-                }
-            }
-            $controller->{$targetPath['view']}($params);
+            $controller->{$targetPath['view']}(Application::checkDependencies($targetPath));
         }
         
+    }
+
+    static private function checkDependencies($targetPath){
+        $params = [];
+        foreach($targetPath['dependencies'] as $key => $val){
+            if(!isset($requestParams->$key) || !$requestParams->$key->getValue()){
+                $params[$key] = $val;
+            }
+            else{
+                $params[$key] = $requestParams->$key->getValue();
+            }
+        }
+        return $params;
     }
 
     static public function requireFiles($dir = '') {
