@@ -4,7 +4,8 @@
         <a href="#">Forum::404devs</a>
     </div>
     <div class="header_second_part">
-        <button type="button" class="auth">Войти</button>
-        <button type="button" class="header_register">Регистрация</button>
+        <a>Гланая</a>
+        <a>О нас</a>
+        <a>Профиль</a>
     </div>
 </header>

@@ -1,0 +1,32 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #1A1A1D; 
+    font-family: 'Inria Sans', sans-serif;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    height: 70vh; 
+    flex-direction: column;
+    padding-left: 10vh;
+}
+.info{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+    color: white;
+    margin-top: 5vh;
+}
+.ava{
+    border-radius: 128px;
+}
