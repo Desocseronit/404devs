@@ -57,9 +57,6 @@ class UserController{
         $user = null;
         if(!Application::$user || Application::$user->id != $userId) $user = User::find($userId);
         else $user = Application::$user;
-        echo '<pre>';
-        var_dump($user->stringify());
-        exit;
         \view\View::renderView(["userData" => $user->stringify()] , '/profileView.php');
         $response = new Response(200);
         $response -> send();
