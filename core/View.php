@@ -13,7 +13,7 @@ class View{
             include(self::$globalPath.'/header.php');
         }
         include(self::$globalPath.$path);
-        include(self::$globalPath.'/footer.html');
+        include(self::$globalPath.'/footer.php');
     }
 
 }
