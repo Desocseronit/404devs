@@ -17,8 +17,9 @@
 <body>
     <main>
         <form class="register-container">
+            <p class="message"></p>
             <div class="register-form">
-                <h1>REGISTRATION</h1>
+                <h1>REGISTRY</h1>
                 <div class="email">
                     <input type="email" name="email" placeholder="Email">
                 </div>
@@ -38,7 +39,7 @@
         </form>
         <div class="form-footer">
             <p>Have account?</p>
-            <a href>Login</a>
+            <a href="http://404devs/login">Login</a>
         </div>      
     </main>
 </body>
@@ -46,17 +47,20 @@
  document.querySelector('form').addEventListener('submit',e=>{
         e.preventDefault()
         let formData = new FormData(e.target)
-         fetch('http://404devs/registrate',{
+         fetch('http://404devs/sign-up',{
             method:'POST',
             body: formData
         })
         .then(resp=>{
-            if(resp.status == 200){
-               return 
+            if(resp.status == 200){ 
+                document.querySelector('.message').textContent = 'Регистрация успешна'
+                window.location.href = 'http://404devs/main';
             }
-        })
-        .then(( )=>{
-            window.location.href = 'http://404devs/main';
+            else if(resp.status == 401){
+                document.querySelector('.message').textContent = 'Регистрация не удалась'
+                return 
+            }
         })})
+
 </script>
 </html>

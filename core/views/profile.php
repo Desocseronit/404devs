@@ -16,10 +16,10 @@
         <div class="info-conatainer">
            <img class="ava" src="https://yt3.googleusercontent.com/eyrzi8qLE-Iv7c_MFQQdIK33CNOUeN2lOasBUeRhItCQyXo79TDE-40ng6fmQCjwgDShjCGNZw=s900-c-k-c0x00ffffff-no-rj" alt="" width="256" height="256">
             <div class="info">
-                <p class="showName"></p>
-                <p class="Name"></p>
-                <button type="button">Изменить</button>
-                <p class="email"></p>
+                <p class="showName">dada</p>
+                <p class="Name">dada</p>
+                <button id="edit" type="button">Изменить</button>
+                <p class="email">dada</p>
             </div>
         </div>
 

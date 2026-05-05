@@ -27,6 +27,21 @@ main {
     color: white;
     margin-top: 5vh;
 }
+.info p{
+    border-bottom:3px solid white ;
+}
 .ava{
     border-radius: 128px;
 }
+#edit {
+    background-color: white;
+    color: #1A1A1D;
+    border: 2px solid white;
+    font-weight: bold;
+    padding: 8px 16px;
+    border-radius: 5px;
+}
+#edit:hover {
+        background-color: transparent;
+        color: white;
+    }
