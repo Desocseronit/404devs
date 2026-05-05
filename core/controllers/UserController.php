@@ -7,7 +7,7 @@ use core\actions\{AuthUser , RegNewUser};
 class UserController{
     public function loginRender(){
         if(Application::$user){
-            Response::redirect('/allPosts');
+            Response::redirect('/all-posts');
         }
         \view\View::renderView(['test' => 'loginPage'] , '/login.php');
     }
@@ -21,8 +21,7 @@ class UserController{
             $response -> send();
         }
         else{
-            // \view\View::renderView(['test' => 'loginPage'] , '/text.php');
-            Response::redirect('/allPosts');
+            Response::redirect('/all-posts');
         }
     }
 
@@ -36,7 +35,7 @@ class UserController{
         $response = null;
         if(!$result){
             \view\View::renderView(['test' => 'regFailed'] , '/failedAuth.php');
-            $response = new Response(400);
+            $response = new Response(403);
         }
         else{
             \view\View::renderView(['test' => 'regSucces'] , '/test.php');
@@ -47,7 +46,7 @@ class UserController{
 
     public function profileRender($params){
         if($params['id'] == null && !Application::$user){
-            Response::redirect('/404err');
+            Response::redirect('/login');
             return;
         }
         $userId = $params['id'];

@@ -8,7 +8,7 @@ class RegNewUser{
         $requestBody = Application::$request->getInfo()->body->getValue();
         $userData = new UserData(name: $requestBody->username->getValue() , password: $requestBody->password->getValue() , email: $requestBody->email->getValue());
         $user = User::reg($userData);
-        if($user){
+        if($user && !User::checkIfUserExist($userData)){
             return $user->stringify();
         }
         return false;

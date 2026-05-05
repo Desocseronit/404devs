@@ -132,4 +132,8 @@ class User{
         unset($vars['auth_token']);
         return json_encode($vars);
     }
+
+    public static function checkIfUserExist(UserData $data){
+        return (bool)Database::instance()->selectRecord('users' , '*' , ['name = \''. $data->name . '\' OR email = \'' . $data->email.'\'']);
+    }
 }
