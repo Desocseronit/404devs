@@ -30,6 +30,6 @@ class Response{
     public static function redirect($url, $statusCode = 302) {
         header('Location: ' . $url, true, $statusCode);
         $resp = new self($statusCode);
-        $resp->send();
+        exit;
     }
 }

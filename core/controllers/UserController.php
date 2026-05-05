@@ -7,9 +7,7 @@ use core\actions\{AuthUser , RegNewUser};
 class UserController{
     public function loginRender(){
         if(Application::$user){
-            \view\View::renderView(['test' => 'succesfull'] , '/test.php');
-            $response = new Response(200);
-            return;
+            Response::redirect('/allPosts');
         }
         \view\View::renderView(['test' => 'loginPage'] , '/login.php');
     }
@@ -19,14 +17,13 @@ class UserController{
         $result = $authUserAction->execute();
         $response = null;
         if(!$result){
-            \view\View::renderView(['test' => 'loginFailed'] , '/failedAuth.php');
-            $response = new Response(400);
+            $response = new Response(401, ['error' => 'Login or password is incorrect']);
+            $response -> send();
         }
         else{
-            \view\View::renderView(['test' => 'succesfull'] , '/test.php');
-            $response = new Response(200);
+            // \view\View::renderView(['test' => 'loginPage'] , '/text.php');
+            Response::redirect('/allPosts');
         }
-        $response -> send();
     }
 
     public function regRender(){
