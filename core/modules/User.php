@@ -134,6 +134,6 @@ class User{
     }
 
     public static function checkIfUserExist(UserData $data){
-        return (bool)Database::instance()->selectRecord('users' , '*' , ['name = \''. $data->name . '\' OR email = \'' . $data->email.'\'']);
+        return (bool)Database::instance()->selectRecord('users' , '*' , ['name = \''. $data->name . '\' OR email = \'' . $data->email.'\''])->items();
     }
 }

@@ -34,12 +34,10 @@ class UserController{
         $result = $regUserAction->execute();
         $response = null;
         if(!$result){
-            \view\View::renderView(['test' => 'regFailed'] , '/failedAuth.php');
             $response = new Response(403);
         }
         else{
-            \view\View::renderView(['test' => 'regSucces'] , '/test.php');
-            $response = new Response(200);
+            Response::redirect('/all-posts');
         }
         $response -> send();
     }

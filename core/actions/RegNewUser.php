@@ -7,9 +7,9 @@ class RegNewUser{
     public function execute(){
         $requestBody = Application::$request->getInfo()->body->getValue();
         $userData = new UserData(name: $requestBody->username->getValue() , password: $requestBody->password->getValue() , email: $requestBody->email->getValue());
-        $user = User::reg($userData);
-        if($user && !User::checkIfUserExist($userData)){
-            return $user->stringify();
+        if(!User::checkIfUserExist($userData)){
+            $user = User::reg($userData);
+            if($user) return $user->stringify();
         }
         return false;
     }
