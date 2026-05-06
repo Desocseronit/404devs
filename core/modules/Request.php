@@ -32,6 +32,8 @@ class Request
             $requestInfo['body'] = null;
         }
 
+        $requestInfo['uri'] = new Collection(explode('/',substr(explode('?',$_SERVER['REQUEST_URI'])[0] , 1)));
+
         if($_FILES){
             $normalizedFiles = $this->normalizeFiles($_FILES);
             $requestInfo['files'] = new Collection($normalizedFiles);

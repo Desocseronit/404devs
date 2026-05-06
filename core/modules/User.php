@@ -14,8 +14,6 @@ class UserData {
         public readonly string $name,
         public readonly string $password,
         public readonly string $email,
-        public readonly string $show_name,
-        public readonly string $avatar_path
     ) {}
 }
 class User{
@@ -40,10 +38,9 @@ class User{
         $token = md5("$data->name" .bin2hex(random_bytes(32)));
         $userData = [];
         $userData['name'] = $data->name;
-        $userData['show_name'] = $data->show_name;
+        $userData['show_name'] = $data->name;
         $userData['password_hash']= $hash_password;
         $userData['email'] = $data->email;
-        $userData['avatar_path'] = $data->avatar_path;
         $userData['created_data'] = date('Y-m-d H:i:s');
         $userData['auth_token']=$token;
         $userData['status_id'] = 1;
@@ -52,34 +49,35 @@ class User{
         return new self($user);
     }
     
-    public function authByCredentials($username,$password){
+    public static function authByCredentials($username,$password){
         $res = Database::instance()->getOne('users',$username,'name');
-        if($res){
-            $userRecord = $res; 
-        } 
+        if(!$res){
+            return false; 
+        }
+        $userRecord = $res;  
         if(password_verify($password,$userRecord->password_hash)){
             $newToken = bin2hex(random_bytes(32));
             Database::instance()->updateRecord(
-                'user',
+                'users',
                 ['auth_token'=>$newToken],
                 'id=$1',
                 [$userRecord->id]
             );
             setcookie("identify",$newToken,time()+60*60*24*14);
-            return $userRecord;
-            
+            return new self(Database::instance()->getOne('users',$username,'name')); 
         }
-        return false;        
+        return false;   
     }
     
-    public function authByCookies(){
+    public static function authByCookies(){
         if(!isset($_COOKIE['identify'])){
             return false;
         }
         $token = $_COOKIE['identify'];
         $res = Database::instance()->getOne('users',$token,'auth_token');
-        return $res;
+        if($res) return new self($res);
     }
+
     public function changeAvatar(Image $img){
         $this->id::instance()->insertRecord('user_avatar',[
             'user_id' => $this->id,
@@ -126,5 +124,16 @@ class User{
     }
     public static function find($id){
         return new self(Database::instance()->getOne('users',$id));
+    }
+
+    public function stringify(){
+        $vars = $this->record->stringify();
+        unset($vars['password_hash']);
+        unset($vars['auth_token']);
+        return json_encode($vars);
+    }
+
+    public static function checkIfUserExist(UserData $data){
+        return (bool)Database::instance()->selectRecord('users' , '*' , ['name = \''. $data->name . '\' OR email = \'' . $data->email.'\''])->items();
     }
 }
