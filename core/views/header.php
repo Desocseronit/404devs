@@ -4,7 +4,8 @@
         <a href="#">Forum::404devs</a>
     </div>
     <div class="header_second_part">
-        <a href = "http://404devs/login"> <button type="button" class="auth">Log in</button></a>
-        <a href = "http://404devs/sign-up"> <button type="button" class="header_register">Sign up</button></a>
+        <a>Гланая</a>
+        <a>О нас</a>
+        <a>Профиль</a>
     </div>
 </header>
