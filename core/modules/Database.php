@@ -58,7 +58,38 @@
  * - пример: incrementField('posts', 'votes', -1, 'id = $1', [1]) - уменьшить votes на 1
  * - пример: incrementField('users', 'rating', 10, 'level = $1 AND status = $2', [5, 'active']) - увеличить rating на 10
  * - возвращает: true/false
+ *
+ * @paginate($tablename, $page = 1, $perPage = 20, $sortBy = 'votes', $sortSide = false, $sortIdSide = false, $categoryId = null, $conditions = [])
+ * - отвечает за получение постов с пагинацией и сортировкой
+ * - вызов: (имя таблицы,
+ *           номер страницы (по умолчанию 1),
+ *           количество записей на странице (по умолчанию 20),
+ *           поле для сортировки (по умолчанию 'votes'),
+ *           направление сортировки основного поля: false = DESC, true = ASC (по умолчанию false),
+ *           направление сортировки ID: false = DESC, true = ASC (по умолчанию false),
+ *           ID категории для фильтрации (по умолчанию null),
+ *           дополнительные условия для WHERE: [[имя_атрибута, оператор, значение]] (по умолчанию []))
+ * - пример: paginate('posts', 1, 20, 'votes', false, false, 5) - получить 1-ю страницу,
+ *           по 20 записей, сортировка по votes DESC, id DESC, фильтр по category_id = 5
+ * - пример: paginate('posts', 2, 15, 'created_at', true, false, null, [['votes', '>', 10]]) - 
+ *           получить 2-ю страницу, по 15 записей, сортировка по created_at ASC, id DESC,
+ *           без фильтра по категории, с дополнительным условием votes > 10
+ * - пример: paginate('posts', 1, 10, 'level_id', false, true, 3, [['views', '>', 100]]) -
+ *           получить 1-ю страницу, по 10 записей, сортировка по level_id DESC, id ASC,
+ *           фильтр по category_id = 3, и views > 100
+ * - возвращает: ассоциативный массив с ключами:
+ *   'data' - Collection объектов Record с записями,
+ *   'current_page' - текущая страница,
+ *   'per_page' - записей на страницу,
+ *   'total' - общее количество записей,
+ *   'total_pages' - общее количество страниц,
+ *   'has_next' - true/false (есть ли следующая страница),
+ *   'has_prev' - true/false (есть ли предыдущая страница),
+ *   'sort_by' - поле по которому выполнена сортировка,
+ *   'from' - номер первой записи на странице,
+ *   'to' - номер последней записи на странице
  */
+ 
 
 class Database{
     private static $_instance = null;
@@ -217,6 +248,79 @@ class Database{
 
         $result = $this->query($sql, $whereParams);
         return $result ? $result: false;
+    }
+
+    public function paginate($tablename, $page = 1, $perPage = 20, $sortBy = 'votes',bool $sortSide = false , bool $sortIdSide = false , $categoryId = null, $conditions = []) {
+        $tablename = $this->tableNameValidator($tablename);
+        if (!$tablename) return false;
+
+        $page = max(1, (int)$page);
+        $perPage = max(1, (int)$perPage);
+        $offset = ($page - 1) * $perPage;
+        $sortSide = $sortSide ? 'ASC' : 'DESC';
+        $sortIdSide = $sortSide ? 'ASC' : 'DESC';
+
+        $orderBy = $sortBy .' '. $sortSide . ', id ' . $sortIdSide;
+
+        $whereClause = '';
+        $params = [];
+        $paramCounter = 1;
+
+        if ($categoryId) {
+            $whereClause .= " category_id = $" . $paramCounter++;
+            $params[] = $categoryId;
+        }
+
+        if (!empty($conditions)) {
+            $conditionData = $this->buildCondition($conditions);
+            if ($whereClause) {
+                $whereClause .= " AND " . $conditionData['sql'];
+            } else {
+                $whereClause = $conditionData['sql'];
+            }
+            $params = array_merge($params, $conditionData['params']);
+            $paramCounter += count($conditionData['params']);
+        }
+
+        $whereClause = $whereClause ? "WHERE $whereClause" : "";
+
+        $sql = "SELECT * FROM $tablename 
+                $whereClause 
+                ORDER BY $orderBy 
+                LIMIT $" . $paramCounter++ . " 
+                OFFSET $" . $paramCounter++;
+
+        $queryParams = array_merge($params, [$perPage, $offset]);
+        $result = $this->query($sql, $queryParams);
+
+        if (!$result) {
+            return false;
+        }
+
+        $posts = [];
+        while ($row = pg_fetch_assoc($result)) {
+            $posts[] = new Record($tablename, $row['id'], $row);
+        }
+        $postsCollection = new Collection($posts);
+
+        $countSql = "SELECT COUNT(*) as total FROM $tablename $whereClause";
+        $countParams = $params;
+        $countResult = $this->query($countSql, $countParams);
+        $totalRow = pg_fetch_assoc($countResult);
+        $total = (int)$totalRow['total'];
+
+        return [
+            'data' => $postsCollection,
+            'current_page' => $page,
+            'per_page' => $perPage,
+            'total' => $total,
+            'total_pages' => ceil($total / $perPage),
+            'has_next' => $page < ceil($total / $perPage),
+            'has_prev' => $page > 1,
+            'sort_by' => $sortBy,
+            'from' => $offset + 1,
+            'to' => min($offset + $perPage, $total)
+        ];
     }
 
     private function tableNameValidator($tabName, $isWrite = false){
