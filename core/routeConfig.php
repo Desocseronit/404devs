@@ -2,8 +2,8 @@
 require_once 'Application.php';
 use core\{Application};
 return [
-    //[type , uri , controller , viewName , dependencies [paramName => [defaultValue , [allowed values?]]] , auth = null (if need auth)]
-    ['type'=>'GET' , 'uri'=>'main' , 'controller'=>'PostsController' , 'view'=>'allPosts' , 'dependencies' => ['page' => [1 , []] , 'filterby' => ['votes' , []] , 'category' => [null , []]]],
+    //[type , uri , controller , viewName , dependencies [paramName => [defaultValue , [allowed values?] , [not allowed values?]] , auth = null (if need auth)]
+    ['type'=>'GET' , 'uri'=>'main' , 'controller'=>'PostsController' , 'view'=>'allPosts' , 'dependencies' => ['page' => [1 , [] , [13]] , 'filterby' => ['votes' , ['votes' , 'newest' , 'oldest']] , 'category' => [null , []], 'level' => [null , []]]],
     ['type'=>'GET' , 'uri'=>'all-posts' , 'controller'=>'PostsController' , 'view'=>'allPosts' , 'dependencies' => ['page' => [1 , []] , 'filterby' => ['votes' , []] , 'category' => [null , []]]],
     ['type' => 'GET' , 'uri'=>'login' , 'controller' => 'UserController' , 'view' => 'loginRender' , 'dependencies' => []],
     ['type' => 'POST' , 'uri'=>'login' , 'controller' => 'UserController' , 'view' => 'authUser' , 'dependencies' => []],

@@ -78,7 +78,7 @@ class Application{
                 $params[$key] = $val[0];
             }
             else{
-                if(in_array($requestParams->$key->getValue() , $val[1]) || empty($val[1])) $params[$key] = $requestParams->$key->getValue();
+                if((in_array($requestParams->$key->getValue() , $val[1]) || empty($val[1])) && (!in_array($requestParams->$key->getValue() , $val[2]) || empty($val[2]))) $params[$key] = $requestParams->$key->getValue();
                 else $params[$key] = $val[0];
             }
         }
