@@ -70,6 +70,10 @@ class Post{
         return $this->userId == $userId;
     }
 
+    public function getAnswersCount(){
+        return Database::instance()->selectRecord('answers' , 'id' , [['post_id' , '=' , $this->id]])->length();
+    }
+
     public function getInfo(){
         $vars = $this->record->stringify();
         $user = User::find($vars['user_id']);
@@ -78,6 +82,7 @@ class Post{
         $vars['level'] = Database::instance()->getOne('levels' , $vars['level_id'])->name;
         $postImgs = $this->getImages();
         $vars['images'] = [];
+        $vars['answersCount'] = $this->getAnswersCount();
         foreach($postImgs->items() as $img){
             $vars['images'][] = Image::findById($img->getValue()->img_id)->path;
         }
