@@ -93,7 +93,14 @@ class Post{
     }
 
     public static function paginate($page = 1 , $perPage = 20 , $filterBy = 'votes' , $sortSide = false , $sortSideId = false , $category = null, $level = null){
-        $data = Database::instance()->paginate('posts' , $page , $perPage , $filterBy , $sortSide , $sortSideId , $category , $level);
+        $conditions = [];
+        if($category){
+            $conditions[] = [['category_id' , '=' , $category]];
+        }
+        if($level){
+            $conditions[] = [['level_id' , '=' , $level]];
+        }
+        $data = Database::instance()->paginate('posts' , $page , $perPage , $filterBy , $sortSide , $sortSideId , $conditions);
         $newData = [];
         foreach($data['data']->items() as $post){
             $postInstance = new self($post->getValue());
@@ -101,5 +108,10 @@ class Post{
         }
         $data['data'] = $newData;
         return $data;
+    }
+
+    public static function getRandomPostId(){
+        $allPosts = Database::instance()->selectRecord('posts' , '*')->items();
+        return $allPosts[array_rand($allPosts)]->getValue()->id;
     }
 }

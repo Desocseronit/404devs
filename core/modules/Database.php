@@ -250,7 +250,7 @@ class Database{
         return $result ? $result: false;
     }
 
-    public function paginate($tablename, $page = 1, $perPage = 20, $sortBy = 'votes',bool $sortSide = false , bool $sortIdSide = false , $categoryId = null, $conditions = []) {
+    public function paginate($tablename, $page = 1, $perPage = 20, $sortBy = 'votes',bool $sortSide = false , bool $sortIdSide = false  ,  $conditions = []) {
         $tablename = $this->tableNameValidator($tablename);
         if (!$tablename) return false;
 
@@ -265,12 +265,6 @@ class Database{
         $whereClause = '';
         $params = [];
         $paramCounter = 1;
-
-        if ($categoryId) {
-            $whereClause .= " category_id = $" . $paramCounter++;
-            $params[] = $categoryId;
-        }
-
         if (!empty($conditions)) {
             $conditionData = $this->buildCondition($conditions);
             if ($whereClause) {
@@ -301,7 +295,7 @@ class Database{
         while ($row = pg_fetch_assoc($result)) {
             $posts[] = new Record($tablename, $row['id'], $row);
         }
-        $postsCollection = new Collection($posts);
+        $data = new Collection($posts);
 
         $countSql = "SELECT COUNT(*) as total FROM $tablename $whereClause";
         $countParams = $params;
@@ -310,7 +304,7 @@ class Database{
         $total = (int)$totalRow['total'];
 
         return [
-            'data' => $postsCollection,
+            'data' => $data,
             'current_page' => $page,
             'per_page' => $perPage,
             'total' => $total,

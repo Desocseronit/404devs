@@ -43,7 +43,7 @@ class Record{
     public function stringify($needStr = false){
         $vars = get_object_vars($this);
         unset($vars['attributes']);
-        unset($vars['id']);
+        // unset($vars['id']);
         unset($vars['_tableName']);
         unset($vars['_id']);
         unset($vars['_oldAttributes']);
