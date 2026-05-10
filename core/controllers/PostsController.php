@@ -5,7 +5,6 @@ require_once(__DIR__.'/../modules/Database.php');
 require_once(__DIR__.'/../modules/Post.php');
 use core\{Application , Database , Post};
 class PostsController{
-    static $perPage = 20 ;
     public function allPosts($params){
         $page = $params['page'];
         $filterBy = $params['filterby'];
