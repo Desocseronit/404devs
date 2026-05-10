@@ -9,4 +9,11 @@ class ErrorController{
         $response->send();
         return;
     }
+
+    public function render401(){
+        \view\View::renderView(path: '/errors/401err.php');
+        $response = new Response(401);
+        $response->send();
+        return;
+    }
 }
