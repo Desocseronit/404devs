@@ -12,6 +12,6 @@ class PostsController{
         $side = (bool)$params['side'];
         $idSide = (bool)$params['idSide'];
         $data = Post::paginate($page , 20 , $filterBy , $side , $idSide , $category , $level);
-        \view\View::renderView(['test' => $data] , '/test.php');
+        \view\View::renderView(['data' => $data] , '/allPosts.php');
     }
 }
