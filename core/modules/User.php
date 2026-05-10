@@ -79,11 +79,16 @@ class User{
     }
 
     public function changeAvatar(Image $img){
-        $this->id::instance()->insertRecord('user_avatar',[
-            'user_id' => $this->id,
-            "avatar" => $img->path
-        ]);
+        Database::instance()->updateRecord('users',[
+            "avatar_id" => $img->id
+        ], 'id = $1' , [$this->id]);
     }
+
+    public function getAvatar(){
+        // $avatar = $this->avatar_id;
+        return Image::findById($this->avatar_id);
+    }
+
     public function logOut(){
         if($this->record && isset($this->record->id)){
             Database::instance()->updateRecord(
@@ -97,6 +102,7 @@ class User{
        
         return true;
     }
+
     public function delete(){
         if($this->record && isset($this->record->id)){
             DataBase::instance()->updateRecord(
@@ -106,6 +112,7 @@ class User{
                 [$this->record->id]
             );
         }
+       
         return true;
     }
     public function modify($newData){
@@ -122,12 +129,15 @@ class User{
             );
         }        
     }
+
     public static function find($id){
         return new self(Database::instance()->getOne('users',$id));
     }
 
     public function stringify(){
         $vars = $this->record->stringify();
+        $vars['avatar'] = Image::findById($vars['avatar_id'])->stringify();
+        unset($vars['avatar_id']);
         unset($vars['password_hash']);
         unset($vars['auth_token']);
         return json_encode($vars);

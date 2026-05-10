@@ -71,9 +71,30 @@ class Post{
     }
 
     public function getInfo(){
-        $vars = get_object_vars($this);
-        unset($vars['record']);
-        unset($vars['id']);
-        return $vars;
+        $vars = $this->record->stringify();
+        $user = User::find($vars['user_id']);
+        $vars['user'] = $user->stringify();
+        $vars['category'] = Database::instance()->getOne('categories' , $vars['category_id'])->name;
+        $vars['level'] = Database::instance()->getOne('levels' , $vars['level_id'])->name;
+        $postImgs = $this->getImages();
+        $vars['images'] = [];
+        foreach($postImgs->items() as $img){
+            $vars['images'][] = Image::findById($img->getValue()->img_id)->path;
+        }
+        unset($vars['user_id']);
+        unset($vars['level_id']);
+        unset($vars['category_id']);
+        return json_encode($vars);
+    }
+
+    public static function paginate($page = 1 , $perPage = 20 , $filterBy = 'votes' , $sortSide = false , $sortSideId = false , $category = null, $level = null){
+        $data = Database::instance()->paginate('posts' , $page , $perPage , $filterBy , $sortSide , $sortSideId , $category , $level);
+        $newData = [];
+        foreach($data['data']->items() as $post){
+            $postInstance = new self($post->getValue());
+            $newData[]=$postInstance->getInfo();
+        }
+        $data['data'] = $newData;
+        return $data;
     }
 }

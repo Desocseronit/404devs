@@ -258,7 +258,7 @@ class Database{
         $perPage = max(1, (int)$perPage);
         $offset = ($page - 1) * $perPage;
         $sortSide = $sortSide ? 'ASC' : 'DESC';
-        $sortIdSide = $sortSide ? 'ASC' : 'DESC';
+        $sortIdSide = $sortIdSide ? 'ASC' : 'DESC';
 
         $orderBy = $sortBy .' '. $sortSide . ', id ' . $sortIdSide;
 
