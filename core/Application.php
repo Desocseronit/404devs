@@ -1,6 +1,6 @@
 <?php namespace core;
-
 class Application{
+    static $CONFIG;
     static $user;
     static $request;
     // static public function runAction(){
@@ -18,6 +18,11 @@ class Application{
     //         $res->send();
     //     }
     // }
+
+    static function initConfig(){
+        self::$CONFIG = require_once('config.php');
+    }
+
     static public function executePath(){
         self::authUser();
         $request = self::$request;
@@ -107,7 +112,7 @@ class Application{
         return self::$request;
     }
 }
-
+Application::initConfig();
 Application::requireFiles(__DIR__ .'/modules/');
 Application::createRequest();
-Database::instance('host = 26.152.118.24 port = 5432 dbname = 404devs user = postgres password = 1');
+Database::instance(Application::$CONFIG['dbConn']);
