@@ -136,8 +136,10 @@ class User{
 
     public function stringify(){
         $vars = $this->record->stringify();
-        $vars['avatar'] = Image::findById($vars['avatar_id'])->stringify();
-        unset($vars['avatar_id']);
+        if(isset($vars['avatar_id'])){
+            $vars['avatar'] = Image::findById($vars['avatar_id'])->stringify();
+            unset($vars['avatar_id']);
+        }
         unset($vars['password_hash']);
         unset($vars['auth_token']);
         return json_encode($vars);
