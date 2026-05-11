@@ -12,7 +12,6 @@ return [
     ['type' => 'POST' , 'uri'=>'create-post' , 'controller' => 'PostsController' , 'view' => 'createPost' , 'dependencies' => []],
 
     //User
-    ['type' => 'POST' , 'uri'=>'sign-up' , 'controller' => 'UserController' , 'view' => 'regUser' , 'dependencies' => []],
     ['type' => 'GET' , 'uri'=>'login' , 'controller' => 'UserController' , 'view' => 'loginRender' , 'dependencies' => []],
     ['type' => 'POST' , 'uri'=>'login' , 'controller' => 'UserController' , 'view' => 'authUser' , 'dependencies' => []],
     ['type' => 'GET' , 'uri'=>'sign-up' , 'controller' => 'UserController' , 'view' => 'regRender' , 'dependencies' => []],
@@ -21,6 +20,7 @@ return [
 
     // Answers
     ['type' => 'GET' , 'uri'=>'view-post' , 'controller' => 'AnswersController' , 'view' => 'postRender' , 'dependencies' => ['id' => [Post::getRandomPostId() , [] , []],'page' => [1 , [] , []] , 'filterby' => ['votes' , ['votes' , 'created_at'] , []], 'side' => [0 , [0 , 1] , []] , 'idSide' => [0 , [0 , 1] , []]]],
+    ['type' => 'POST' , 'uri'=>'add-answer' , 'controller' => 'AnswersController' , 'view' => 'addAnswer' , 'dependencies' => []],
 
     //errors
     'errors' => [['error' => 404 , 'view' => 'render404']]
