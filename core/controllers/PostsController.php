@@ -39,4 +39,22 @@ class PostsController{
         }
         $resp->send();
     }
+
+    public function votePost($params){
+        $reqBody = Application::$request->getInfo()->body->getValue();
+        $id = $reqBody->id->getValue();
+        $vote = $reqBody->vote->getValue();
+        $resp;
+        $post = Post::find($id);
+        $post->updateLikeStatus();
+        if($post->isLiked){
+            $resp = new Response(400);
+            $resp->send();
+            return;
+        } 
+        $post->vote($vote);
+        if($post->isLiked) $resp = new Response(200);
+        else $resp = new Response(400);
+        $resp->send();
+    }
 }

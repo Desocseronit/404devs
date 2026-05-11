@@ -10,6 +10,7 @@ return [
     ['type'=>'GET' , 'uri'=>'all-posts' , 'controller'=>'PostsController' , 'view'=>'allPosts' , 'dependencies' => ['page' => [1 , [] , []] , 'filterby' => ['votes' , ['votes' , 'created_at' , 'views'] , []] , 'category' => [null , ['PHP' , 'JAVA' , 'Go' , 'Pyhton' , 'Node.js' , 'HTML' , 'CSS', 'JavaScript'] , []], 'level' => [null , ['studying' , 'easy' , 'medium' , 'hard' , 'esoteric'] , []], 'side' => [0 , [0 , 1] , []] , 'idSide' => [0 , [0 , 1] , []]]],
     ['type' => 'GET' , 'uri'=>'create-post' , 'controller' => 'PostsController' , 'view' => 'createPostsRender' , 'dependencies' => []],
     ['type' => 'POST' , 'uri'=>'create-post' , 'controller' => 'PostsController' , 'view' => 'createPost' , 'dependencies' => []],
+    ['type' => 'POST' , 'uri'=>'vote-post' , 'controller' => 'PostsController' , 'view' => 'votePost' , 'dependencies' => []],
 
     //User
     ['type' => 'GET' , 'uri'=>'login' , 'controller' => 'UserController' , 'view' => 'loginRender' , 'dependencies' => []],

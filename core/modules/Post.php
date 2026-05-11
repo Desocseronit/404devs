@@ -17,6 +17,7 @@ class PostData {
  */
 class Post{
     public $record;
+    public $isLiked = false;
 
     private function __construct($record){
         $this->record = $record;
@@ -75,6 +76,7 @@ class Post{
     }
 
     public function getInfo(){
+        $this->updateLikeStatus();
         $vars = $this->record->stringify();
         $user = User::find($vars['user_id']);
         $vars['user'] = $user->stringify();
@@ -121,5 +123,16 @@ class Post{
         }
         setcookie("viewed_".$this->id, true ,time()+60*60*24);
         return Database::instance()->incrementField('posts', 'views' , 1, 'id = $1', [$this->id]);
+    }
+
+    public function vote($val){
+        Database::instance()->incrementField('posts', 'votes' , (int)$val, 'id = $1', [$this->id]);
+        Database::instance()->insertRecord('voted_posts' , ['post_id' => $this->id , 'user_id' => Application::$user->id]);
+        $this->updateLikeStatus();
+        return $this->isLiked;
+    }
+
+    public function updateLikeStatus(){
+        $this->isLiked = (bool)Database::instance()->selectRecord('voted_posts' , '*' , [['user_id' , '=' , Application::$user->id], ['post_id' , '=' , $this->id]])->items();
     }
 }
