@@ -76,8 +76,9 @@ class Post{
     }
 
     public function getInfo(){
-        $this->updateLikeStatus();
         $vars = $this->record->stringify();
+        if(Application::$user) $this->updateLikeStatus();
+        else unset($vars['isLiked']);
         $user = User::find($vars['user_id']);
         $vars['user'] = $user->stringify();
         $vars['category'] = Database::instance()->getOne('categories' , $vars['category_id'])->name;
