@@ -5,8 +5,9 @@ require_once(__DIR__.'/../modules/Database.php');
 require_once(__DIR__.'/../modules/Post.php');
 require_once(__DIR__.'/../modules/Answer.php');
 require_once(__DIR__.'/../actions/NewAnswer.php');
+require_once(__DIR__.'/../actions/changeAnswer.php');
 use core\{Application , Response , Database , Post , Answer};
-use core\actions\{NewAnswer};
+use core\actions\{NewAnswer , ChangeAnswer};
 class AnswersController{
     public function postRender($params){
         $post = Post::find((int)$params['id']);
@@ -55,6 +56,25 @@ class AnswersController{
         $answer->vote($vote);
         if($answer->isLiked) $resp = new Response(200);
         else $resp = new Response(400);
+        $resp->send();
+    }
+
+    public function changeAnswer(){
+        if(!Application::$user){
+            require_once('ErrorController.php');
+            $errorConInstance = new ErrorController();
+            $errorConInstance->render401();
+            return;
+        }
+        $actionInstance = new changeAnswer();
+        $res = $actionInstance->execute();
+        $resp;
+        if(!$res){
+            $resp = new Response(400);
+        }
+        else{
+            $resp = new Response(200);
+        }
         $resp->send();
     }
 }
