@@ -114,4 +114,12 @@ class Post{
         $allPosts = Database::instance()->selectRecord('posts' , '*')->items();
         return $allPosts[array_rand($allPosts)]->getValue()->id;
     }
+
+    public function incrementViews(){
+        if(isset($_COOKIE["viewed_".$this->id])){
+            return;
+        }
+        setcookie("viewed_".$this->id, true ,time()+60*60*24);
+        return Database::instance()->incrementField('posts', 'views' , 1, 'id = $1', [$this->id]);
+    }
 }

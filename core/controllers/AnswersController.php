@@ -10,6 +10,7 @@ use core\actions\{NewAnswer};
 class AnswersController{
     public function postRender($params){
         $post = Post::find((int)$params['id']);
+        $post->incrementViews();
         $page = $params['page'];
         $filterBy = $params['filterby'];
         $side = (bool)$params['side'];
