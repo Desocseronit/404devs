@@ -4,8 +4,9 @@ require_once(__DIR__.'/../Application.php');
 require_once(__DIR__.'/../modules/Database.php');
 require_once(__DIR__.'/../modules/Post.php');
 require_once(__DIR__.'/../actions/NewPost.php');
+require_once(__DIR__.'/../actions/ChangePost.php');
 use core\{Application , Response , Database , Post};
-use core\actions\{NewPost};
+use core\actions\{NewPost ,ChangePost};
 class PostsController{
     public function allPosts($params){
         $page = $params['page'];
@@ -28,6 +29,12 @@ class PostsController{
     }
 
     public function createPost(){
+        if(!Application::$user){
+            require_once('ErrorController.php');
+            $errorConInstance = new ErrorController();
+            $errorConInstance->render401();
+            return;
+        }
         $actionInstance = new NewPost();
         $res = $actionInstance->execute();
         $resp;
@@ -55,6 +62,25 @@ class PostsController{
         $post->vote($vote);
         if($post->isLiked) $resp = new Response(200);
         else $resp = new Response(400);
+        $resp->send();
+    }
+
+    public function changePost(){
+        if(!Application::$user){
+            require_once('ErrorController.php');
+            $errorConInstance = new ErrorController();
+            $errorConInstance->render401();
+            return;
+        }
+        $actionInstance = new ChangePost();
+        $res = $actionInstance->execute();
+        $resp;
+        if(!$res){
+            $resp = new Response(400);
+        }
+        else{
+            $resp = new Response(200);
+        }
         $resp->send();
     }
 }
