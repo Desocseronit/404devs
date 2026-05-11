@@ -37,7 +37,7 @@ class UserController{
             $response = new Response(403);
         }
         else{
-            Response::redirect('/all-posts');
+            Response::redirect('/all-posts' , 201);
         }
         $response -> send();
     }
