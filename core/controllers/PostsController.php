@@ -35,7 +35,7 @@ class PostsController{
             $resp = new Response(400);
         }
         else{
-            $resp = new Response(200 , ['postId' => $res->id]);
+            $resp = new Response(201 , ['postId' => $res->id]);
         }
         $resp->send();
     }
