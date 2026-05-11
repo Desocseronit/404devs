@@ -15,6 +15,7 @@ class AnswerData{
  */
 class Answer{
     public $record;
+    public $isLiked = false;
 
     private function __construct($record){
         $this->record = $record;
@@ -86,5 +87,16 @@ class Answer{
         }
         $data['data'] = $newData;
         return $data;
+    }
+
+    public function vote($val){
+        Database::instance()->incrementField('answers', 'votes' , (int)$val, 'id = $1', [$this->id]);
+        Database::instance()->insertRecord('voted_answers' , ['answer_id' => $this->id , 'user_id' => Application::$user->id]);
+        $this->updateLikeStatus();
+        return $this->isLiked;
+    }
+
+    public function updateLikeStatus(){
+        $this->isLiked = (bool)Database::instance()->selectRecord('voted_answers' , '*' , [['user_id' , '=' , Application::$user->id], ['answer_id' , '=' , $this->id]])->items();
     }
 }

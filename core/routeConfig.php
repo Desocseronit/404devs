@@ -22,6 +22,7 @@ return [
     // Answers
     ['type' => 'GET' , 'uri'=>'view-post' , 'controller' => 'AnswersController' , 'view' => 'postRender' , 'dependencies' => ['id' => [Post::getRandomPostId() , [] , []],'page' => [1 , [] , []] , 'filterby' => ['votes' , ['votes' , 'created_at'] , []], 'side' => [0 , [0 , 1] , []] , 'idSide' => [0 , [0 , 1] , []]]],
     ['type' => 'POST' , 'uri'=>'add-answer' , 'controller' => 'AnswersController' , 'view' => 'addAnswer' , 'dependencies' => []],
+    ['type' => 'POST' , 'uri'=>'vote-answer' , 'controller' => 'AnswersController' , 'view' => 'voteAnswer' , 'dependencies' => []],
 
     //errors
     'errors' => [['error' => 404 , 'view' => 'render404']]

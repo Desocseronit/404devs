@@ -39,4 +39,22 @@ class AnswersController{
         }
         $resp->send();
     }
+
+    public function voteAnswer($params){
+        $reqBody = Application::$request->getInfo()->body->getValue();
+        $id = $reqBody->id->getValue();
+        $vote = $reqBody->vote->getValue();
+        $resp;
+        $answer = Answer::find($id);
+        $answer->updateLikeStatus();
+        if($answer->isLiked){
+            $resp = new Response(400);
+            $resp->send();
+            return;
+        } 
+        $answer->vote($vote);
+        if($answer->isLiked) $resp = new Response(200);
+        else $resp = new Response(400);
+        $resp->send();
+    }
 }
