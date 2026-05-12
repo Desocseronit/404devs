@@ -37,9 +37,10 @@ class UserController{
             $response = new Response(403);
         }
         else{
-            Response::redirect('/all-posts' , 201);
+            $response = new Response(201);
         }
         $response -> send();
+        return;
     }
 
     public function profileRender($params){
@@ -57,7 +58,14 @@ class UserController{
     }
 
     public function logout(){
-        Application::$user->logOut();
-        Response::redirect('/all-posts');
+        if(Application::$user) Application::$user->logOut();
+        Response::redirect('/all-posts', 303);
+    }
+
+    public function deleteUser(){
+        Application::$user->delete();
+        $res = new Response(200);
+        $res->send();
+        return;
     }
 }

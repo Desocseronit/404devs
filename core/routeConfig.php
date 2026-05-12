@@ -20,7 +20,7 @@ return [
     ['type' => 'POST' , 'uri'=>'sign-up' , 'controller' => 'UserController' , 'view' => 'regUser' , 'dependencies' => []],
     ['type' => 'GET' , 'uri'=>'profile' , 'controller' => 'UserController' , 'view' => 'profileRender' , 'dependencies' => ['id'  => [Application::$user->id ?? null, [], []]]],
     ['type' => 'GET' , 'uri'=>'logout' , 'controller' => 'UserController' , 'view' => 'logout' , 'dependencies' => []],
-    // ['type' => 'POST' , 'uri'=>'logout' , 'controller' => 'UserController' , 'view' => 'logout' , 'dependencies' => []],
+    ['type' => 'POST' , 'uri'=>'deleteUser' , 'controller' => 'UserController' , 'view' => 'deleteUser' , 'dependencies' => []],
     
 
     // Answers

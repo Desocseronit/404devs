@@ -54,7 +54,8 @@ class User{
         if(!$res){
             return false; 
         }
-        $userRecord = $res;  
+        $userRecord = $res;
+        if($userRecord->status_id == 4) return false;  
         if(password_verify($password,$userRecord->password_hash)){
             $newToken = bin2hex(random_bytes(32));
             Database::instance()->updateRecord(
@@ -146,6 +147,8 @@ class User{
     }
 
     public static function checkIfUserExist(UserData $data){
-        return (bool)Database::instance()->selectRecord('users' , '*' , ['name = \''. $data->name . '\' OR email = \'' . $data->email.'\''])->items();
+        $record = Database::instance()->selectRecord('users' , '*' , ['name = \''. $data->name . '\' OR email = \'' . $data->email.'\''])->items();
+        if($record[0] && $record->{0}->getValue()->status_id == 4) return false;
+        return (bool)$record;
     }
 }
