@@ -2,7 +2,7 @@
 require_once(__DIR__.'/../View.php');
 require_once(__DIR__.'/../actions/AuthUser.php');
 require_once(__DIR__.'/../actions/RegNewUser.php');
-use core\{Application , Response , User};
+use core\{Application , Response , User , Post};
 use core\actions\{AuthUser , RegNewUser};
 class UserController{
     public function loginRender(){
@@ -49,10 +49,18 @@ class UserController{
             return;
         }
         $userId = $params['id'];
+        $page = $params['page'];
+        $filterBy = $params['filterby'];
+        $category = $params['category'];
+        $level = $params['level'];
+        $side = (bool)$params['side'];
+        $idSide = (bool)$params['idSide'];
         $user = null;
         if(!Application::$user || Application::$user->id != $userId) $user = User::find($userId);
         else $user = Application::$user;
-        \view\View::renderView(["userData" => $user->stringify()] , '/profile.php');
+        $posts = Post::paginate($page , Application::$CONFIG['publicationsPerPage'] , $filterBy , $side , $idSide , $category , $level , $user->id);
+        // \view\View::renderView(["userData" => $user->stringify() , "posts" => $posts] , '/profile.php');
+        \view\View::renderView(['test'=>["userData" => $user->stringify() , "posts" => $posts]] , '/test.php');
         $response = new Response(200);
         $response -> send();
     }

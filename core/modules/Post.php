@@ -95,13 +95,16 @@ class Post{
         return json_encode($vars);
     }
 
-    public static function paginate($page = 1 , $perPage = 20 , $filterBy = 'votes' , $sortSide = false , $sortSideId = false , $category = null, $level = null){
+    public static function paginate($page = 1 , $perPage = 20 , $filterBy = 'votes' , $sortSide = false , $sortSideId = false , $category = null, $level = null , $userId = null){
         $conditions = [];
         if($category){
-            $conditions[] = [['category_id' , '=' , $category]];
+            $conditions[] = ['category_id' , '=' , $category];
         }
         if($level){
-            $conditions[] = [['level_id' , '=' , $level]];
+            $conditions[] = ['level_id' , '=' , $level];
+        }
+        if($userId){
+            $conditions[]=['user_id', '=' , $userId];
         }
         $data = Database::instance()->paginate('posts' , $page , $perPage , $filterBy , $sortSide , $sortSideId , $conditions);
         $newData = [];
