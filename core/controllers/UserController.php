@@ -55,4 +55,9 @@ class UserController{
         $response = new Response(200);
         $response -> send();
     }
+
+    public function logout(){
+        Application::$user->logOut();
+        Response::redirect('/all-posts');
+    }
 }

@@ -19,6 +19,9 @@ return [
     ['type' => 'GET' , 'uri'=>'sign-up' , 'controller' => 'UserController' , 'view' => 'regRender' , 'dependencies' => []],
     ['type' => 'POST' , 'uri'=>'sign-up' , 'controller' => 'UserController' , 'view' => 'regUser' , 'dependencies' => []],
     ['type' => 'GET' , 'uri'=>'profile' , 'controller' => 'UserController' , 'view' => 'profileRender' , 'dependencies' => ['id'  => [Application::$user->id ?? null, [], []]]],
+    ['type' => 'GET' , 'uri'=>'logout' , 'controller' => 'UserController' , 'view' => 'logout' , 'dependencies' => []],
+    // ['type' => 'POST' , 'uri'=>'logout' , 'controller' => 'UserController' , 'view' => 'logout' , 'dependencies' => []],
+    
 
     // Answers
     ['type' => 'GET' , 'uri'=>'view-post' , 'controller' => 'AnswersController' , 'view' => 'postRender' , 'dependencies' => ['id' => [Post::getRandomPostId() , [] , []],'page' => [1 , [] , []] , 'filterby' => ['votes' , ['votes' , 'created_at'] , []], 'side' => [0 , [0 , 1] , []] , 'idSide' => [0 , [0 , 1] , []]]],
