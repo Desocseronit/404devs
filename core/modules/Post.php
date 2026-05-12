@@ -139,4 +139,11 @@ class Post{
     public function updateLikeStatus(){
         $this->isLiked = (bool)Database::instance()->selectRecord('voted_posts' , '*' , [['user_id' , '=' , Application::$user->id], ['post_id' , '=' , $this->id]])->items();
     }
+
+    public static function getAllCategories(){
+        return array_map(fn($element) => $element->getValue()->name, Database::instance()->selectRecord('categories' , 'name')->items());
+    }
+    public static function getAllLevels(){
+        return array_map(fn($element) => $element->getValue()->name, Database::instance()->selectRecord('levels' , 'name')->items());
+    }
 }
