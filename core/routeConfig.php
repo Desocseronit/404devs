@@ -30,6 +30,7 @@ return [
     ['type' => 'POST' , 'uri'=>'add-answer' , 'controller' => 'AnswersController' , 'view' => 'addAnswer' , 'dependencies' => []],
     ['type' => 'POST' , 'uri'=>'vote-answer' , 'controller' => 'AnswersController' , 'view' => 'voteAnswer' , 'dependencies' => []],
     ['type' => 'POST' , 'uri'=>'change-answer' , 'controller' => 'AnswersController' , 'view' => 'changeAnswer' , 'dependencies' => []],
+    ['type' => 'POST' , 'uri'=>'delete-answer' , 'controller' => 'AnswersController' , 'view' => 'deleteAnswer' , 'dependencies' => []],
 
     //errors
     'errors' => [['error' => 404 , 'view' => 'render404']]
