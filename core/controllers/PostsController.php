@@ -5,8 +5,9 @@ require_once(__DIR__.'/../modules/Database.php');
 require_once(__DIR__.'/../modules/Post.php');
 require_once(__DIR__.'/../actions/NewPost.php');
 require_once(__DIR__.'/../actions/ChangePost.php');
+require_once(__DIR__.'/../actions/DeletePost.php');
 use core\{Application , Response , Database , Post};
-use core\actions\{NewPost ,ChangePost};
+use core\actions\{NewPost ,ChangePost,DeletePost};
 class PostsController{
     public function allPosts($params){
         $page = $params['page'];
@@ -73,6 +74,25 @@ class PostsController{
             return;
         }
         $actionInstance = new ChangePost();
+        $res = $actionInstance->execute();
+        $resp;
+        if(!$res){
+            $resp = new Response(400);
+        }
+        else{
+            $resp = new Response(200);
+        }
+        $resp->send();
+    }
+
+    public function deletePost(){
+        if(!Application::$user){
+            require_once('ErrorController.php');
+            $errorConInstance = new ErrorController();
+            $errorConInstance->render401();
+            return;
+        }
+        $actionInstance = new DeletePost();
         $res = $actionInstance->execute();
         $resp;
         if(!$res){

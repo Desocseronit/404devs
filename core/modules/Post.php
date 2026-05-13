@@ -56,6 +56,7 @@ class Post{
     }
 
     public function delete(){
+        Database::instance()->deleteRecord('answers' , 'post_id = $1' , [$this->id]);
         return Database::instance()->deleteRecord('posts' , 'id = $1' , [$this->id]);
     }
 

@@ -12,6 +12,7 @@ return [
     ['type' => 'POST' , 'uri'=>'create-post' , 'controller' => 'PostsController' , 'view' => 'createPost' , 'dependencies' => []],
     ['type' => 'POST' , 'uri'=>'vote-post' , 'controller' => 'PostsController' , 'view' => 'votePost' , 'dependencies' => []],
     ['type' => 'POST' , 'uri'=>'change-post' , 'controller' => 'PostsController' , 'view' => 'changePost' , 'dependencies' => []],
+    ['type' => 'POST' , 'uri'=>'delete-post' , 'controller' => 'PostsController' , 'view' => 'deletePost' , 'dependencies' => []],
 
     //User
     ['type' => 'GET' , 'uri'=>'login' , 'controller' => 'UserController' , 'view' => 'loginRender' , 'dependencies' => []],
