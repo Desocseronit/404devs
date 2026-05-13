@@ -20,7 +20,8 @@ return [
     ['type' => 'POST' , 'uri'=>'sign-up' , 'controller' => 'UserController' , 'view' => 'regUser' , 'dependencies' => []],
     ['type' => 'GET' , 'uri'=>'profile' , 'controller' => 'UserController' , 'view' => 'profileRender' , 'dependencies' => ['id'  => [Application::$user->id ?? null, [], []] , 'page' => [1 , [] , []] , 'filterby' => ['votes' , ['votes' , 'created_at' , 'views'] , []] , 'category' => [null , Post::getAllCategories() , []], 'level' => [null , Post::getAllLevels() , []], 'side' => [0 , [0 , 1] , []] , 'idSide' => [0 , [0 , 1] , []]]],
     ['type' => 'GET' , 'uri'=>'logout' , 'controller' => 'UserController' , 'view' => 'logout' , 'dependencies' => []],
-    ['type' => 'POST' , 'uri'=>'deleteUser' , 'controller' => 'UserController' , 'view' => 'deleteUser' , 'dependencies' => []],
+    ['type' => 'POST' , 'uri'=>'delete-user' , 'controller' => 'UserController' , 'view' => 'deleteUser' , 'dependencies' => []],
+    ['type' => 'POST' , 'uri'=>'edit-user' , 'controller' => 'UserController' , 'view' => 'editUser' , 'dependencies' => []],
     
 
     // Answers

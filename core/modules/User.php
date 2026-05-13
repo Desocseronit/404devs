@@ -79,9 +79,9 @@ class User{
         if($res) return new self($res);
     }
 
-    public function changeAvatar(Image $img){
+    public function changeAvatar($imgId){
         Database::instance()->updateRecord('users',[
-            "avatar_id" => $img->id
+            "avatar_id" => $imgId[0]
         ], 'id = $1' , [$this->id]);
     }
 

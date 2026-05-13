@@ -2,8 +2,9 @@
 require_once(__DIR__.'/../View.php');
 require_once(__DIR__.'/../actions/AuthUser.php');
 require_once(__DIR__.'/../actions/RegNewUser.php');
+require_once(__DIR__.'/../actions/ModifyUser.php');
 use core\{Application , Response , User , Post};
-use core\actions\{AuthUser , RegNewUser};
+use core\actions\{AuthUser , RegNewUser, ModifyUser};
 class UserController{
     public function loginRender(){
         if(Application::$user){
@@ -74,6 +75,16 @@ class UserController{
         Application::$user->delete();
         $res = new Response(200);
         $res->send();
+        return;
+    }
+
+    public function editUser(){
+        $actionInstance = new ModifyUser();
+        $res = $actionInstance->execute();
+        $resp;
+        if($res) $resp = new Response(200);
+        else $resp = new Response(400);
+        $resp->send();
         return;
     }
 }
