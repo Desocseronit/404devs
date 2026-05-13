@@ -1,5 +1,5 @@
 <?php namespace core\actions;
-use core\{Application , Database , Post , Answer, Image , Response};
+use core\{Application , Database , Post , Image , Response};
 require_once ('DeleteImages.php');
 class DeletePost{
     public function execute(){
@@ -9,7 +9,7 @@ class DeletePost{
             $imgs = $post->getImages();
             $imgsNames = [];
             foreach($imgs->items() as $imgId){
-                $imgsNames[] = Image::findById($imgId)->name;
+                $imgsNames[] = Image::findById($imgId->getValue()->img_id)->name;
             }
             $deleteImgs = new DeleteImages();
             $deleteImgs->execute($imgsNames);
