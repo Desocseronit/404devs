@@ -6,7 +6,7 @@ return [
     //[type , uri , controller , viewName , dependencies [paramName => [defaultValue , [allowed values?] , [not allowed values?]] , auth = null (if need auth)]
     
     //Posts
-    ['type'=>'GET' , 'uri'=>'main' , 'controller'=>'PostsController' , 'view'=>'allPosts' , 'dependencies' => ['page' => [1 , [] , []] , 'filterby' => ['votes' , ['votes' , 'created_at' , 'views'] , []] , 'category' => [null , Post::getAllCategories() , []], 'level' => [null , Post::getAllLevels() , []], 'side' => [0 , [0 , 1] , []] , 'idSide' => [0 , [0 , 1] , []]]],
+    ['type'=>'GET' , 'uri'=>'main' , 'controller'=>'PostsController' , 'view'=>'allPosts' , 'dependencies' => ['page' => [1 , [] , []] ,'title' =>['' , [] , []] , 'filterby' => ['votes' , ['votes' , 'created_at' , 'views'] , []] , 'category' => [null , Post::getAllCategories() , []], 'level' => [null , Post::getAllLevels() , []], 'side' => [0 , [0 , 1] , []] , 'idSide' => [0 , [0 , 1] , []]]],
     ['type'=>'GET' , 'uri'=>'all-posts' , 'controller'=>'PostsController' , 'view'=>'allPosts' , 'dependencies' => ['page' => [1 , [] , []] , 'filterby' => ['votes' , ['votes' , 'created_at' , 'views'] , []] , 'category' => [null , Post::getAllCategories() , []], 'level' => [null , Post::getAllLevels() , []], 'side' => [0 , [0 , 1] , []] , 'idSide' => [0 , [0 , 1] , []]]],
     ['type' => 'GET' , 'uri'=>'create-post' , 'controller' => 'PostsController' , 'view' => 'createPostsRender' , 'dependencies' => []],
     ['type' => 'POST' , 'uri'=>'create-post' , 'controller' => 'PostsController' , 'view' => 'createPost' , 'dependencies' => []],

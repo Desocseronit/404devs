@@ -96,7 +96,7 @@ class Post{
         return json_encode($vars);
     }
 
-    public static function paginate($page = 1 , $perPage = 20 , $filterBy = 'votes' , $sortSide = false , $sortSideId = false , $category = null, $level = null , $userId = null){
+    public static function paginate($page = 1 , $perPage = 20 , $filterBy = 'votes' , $sortSide = false , $sortSideId = false , $category = null, $level = null , $userId = null , $title = null){
         $conditions = [];
         if($category){
             $conditions[] = ['category_id' , '=' , $category];
@@ -106,6 +106,9 @@ class Post{
         }
         if($userId){
             $conditions[]=['user_id', '=' , $userId];
+        }
+        if($title){
+            $conditions[]=['title', 'ILIKE' , '%'.$title.'%'];
         }
         $data = Database::instance()->paginate('posts' , $page , $perPage , $filterBy , $sortSide , $sortSideId , $conditions);
         $newData = [];

@@ -11,12 +11,13 @@ use core\actions\{NewPost ,ChangePost,DeletePost};
 class PostsController{
     public function allPosts($params){
         $page = $params['page'];
+        $title = $params['title'];
         $filterBy = $params['filterby'];
         $category = $params['category'];
         $level = $params['level'];
         $side = (bool)$params['side'];
         $idSide = (bool)$params['idSide'];
-        $data = Post::paginate($page , Application::$CONFIG['publicationsPerPage'] , $filterBy , $side , $idSide , $category , $level);
+        $data = Post::paginate($page , Application::$CONFIG['publicationsPerPage'] , $filterBy , $side , $idSide , $category , $level , title : $title);
         \view\View::renderView(['data' => $data] , '/allPosts.php');
     }
 
