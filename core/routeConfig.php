@@ -23,6 +23,7 @@ return [
     ['type' => 'GET' , 'uri'=>'logout' , 'controller' => 'UserController' , 'view' => 'logout' , 'dependencies' => []],
     ['type' => 'POST' , 'uri'=>'delete-user' , 'controller' => 'UserController' , 'view' => 'deleteUser' , 'dependencies' => []],
     ['type' => 'POST' , 'uri'=>'edit-user' , 'controller' => 'UserController' , 'view' => 'editUser' , 'dependencies' => []],
+    ['type' => 'GET' , 'uri'=>'find-user' , 'controller' => 'UserController' , 'view' => 'findUser' , 'dependencies' => ['name' => [ '', [], []]]],
     
 
     // Answers

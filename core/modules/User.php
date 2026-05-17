@@ -135,12 +135,31 @@ class User{
         return new self(Database::instance()->getOne('users',$id));
     }
 
-    public function stringify(){
+    public static function findByLogin($name){
+        $usersRecords = Database::instance()->selectRecord('users' , "*"  , [['name', 'ILIKE' , "%$name%"]]);
+        $users = [];
+        foreach($usersRecords->items() as $record){
+            $users[] = new self($record->getValue());
+        }
+        return $users;
+    }
+
+    public static function findByShowName($name){
+        $usersRecords = Database::instance()->selectRecord('users' , "*"  , [ empty($name) ? "TRUE" : "show_name ILIKE '%$name%'"]);
+        $users = [];
+        foreach($usersRecords->items() as $record){
+            $users[] = new self($record->getValue());
+        }
+        return $users;
+    }
+
+    public function stringify($isPrivate = false){
         $vars = $this->record->stringify();
         if(isset($vars['avatar_id'])){
             $vars['avatar'] = Image::findById($vars['avatar_id'])->stringify();
             unset($vars['avatar_id']);
         }
+        if($isPrivate) unset($vars['email']);
         unset($vars['password_hash']);
         unset($vars['auth_token']);
         return json_encode($vars);

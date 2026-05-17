@@ -61,7 +61,7 @@ class UserController{
         else $user = Application::$user;
         $posts = Post::paginate($page , Application::$CONFIG['publicationsPerPage'] , $filterBy , $side , $idSide , $category , $level , $user->id);
         // \view\View::renderView(["userData" => $user->stringify() , "posts" => $posts] , '/profile.php');
-        \view\View::renderView(['test'=>["userData" => $user->stringify() , "posts" => $posts]] , '/test.php');
+        \view\View::renderView(['data'=>["userData" => $userId != Application::$user->id ? $user->stringify(true): $user->stringify() , "posts" => $posts]] , '/profile.php');
         $response = new Response(200);
         $response -> send();
     }
@@ -85,6 +85,32 @@ class UserController{
         if($res) $resp = new Response(200);
         else $resp = new Response(400);
         $resp->send();
+        return;
+    }
+
+    public function findUser($params){
+        $name = $params['name'];
+        $users = User::findByShowName($name);
+        if($name != '') $users[] = User::findByLogin($name);
+        $notFilteredData = [];
+
+        foreach ($users as $item) {
+            if (is_array($item)) {
+                foreach ($item as $subItem) {
+                    if ($subItem instanceof User) {
+                        $notFilteredData[$subItem->id] = $subItem;
+                    }
+                }
+            } elseif ($item instanceof User) {
+                $notFilteredData[$item->id] = $item;
+            }
+        }
+        $data = [];
+        foreach(array_values($notFilteredData) as $user){
+            $data[] = $user->stringify(true);
+        }
+
+        \view\View::renderView(['test' => $data] , '/test.php');
         return;
     }
 }
