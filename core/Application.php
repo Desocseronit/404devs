@@ -1,6 +1,6 @@
 <?php namespace core;
-
 class Application{
+    static $CONFIG;
     static $user;
     static $request;
     // static public function runAction(){
@@ -18,21 +18,20 @@ class Application{
     //         $res->send();
     //     }
     // }
+
+    static function initConfig(){
+        self::$CONFIG = require_once('config.php');
+    }
+
     static public function executePath(){
         self::authUser();
         $request = self::$request;
         $requestType = $request->getInfo()->type->getValue();
         $requestURI = $request->getInfo()->uri->getValue();
         $allPathes = include 'routeConfig.php';
-        if($requestURI->{0}->getValue() == 'main'){
-            require_once('controllers/PostsController.php');
-            $controllerName = 'controllers\\PostsController';
-            $controller = new $controllerName();
-            $targetPath = $allPathes[0];
-            $controller->allPosts(Application::checkDependencies($targetPath));
-        }
-        elseif($requestURI->{0}->getValue() == 'about'){
-            echo 'its the about page';
+        if($requestURI->{0}->getValue() == 'about'){
+            require_once('View.php');
+            \view\View::renderView(path : '/about.php');
         }
         else{
             $targetPath = null;
@@ -81,10 +80,11 @@ class Application{
         $params = [];
         foreach($targetPath['dependencies'] as $key => $val){
             if(!isset($requestParams->$key) || !$requestParams->$key->getValue()){
-                $params[$key] = $val;
+                $params[$key] = $val[0];
             }
             else{
-                $params[$key] = $requestParams->$key->getValue();
+                if((in_array($requestParams->$key->getValue() , $val[1]) || empty($val[1])) && (!in_array($requestParams->$key->getValue() , $val[2]) || empty($val[2]))) $params[$key] = $requestParams->$key->getValue();
+                else $params[$key] = $val[0];
             }
         }
         return $params;
@@ -112,8 +112,7 @@ class Application{
         return self::$request;
     }
 }
-
+Application::initConfig();
 Application::requireFiles(__DIR__ .'/modules/');
 Application::createRequest();
-Database::instance('host = 26.152.118.24 port = 5432 dbname = 404devs user = postgres password = 1');
-
+Database::instance(Application::$CONFIG['dbConn']);

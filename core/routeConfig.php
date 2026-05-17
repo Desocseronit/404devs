@@ -1,13 +1,38 @@
 <?php
 require_once 'Application.php';
-use core\{Application};
+require_once 'modules/Post.php';
+use core\{Application , Post};
 return [
-    //[type , uri , controller , viewName , dependencies [paramName => defaultValue] , auth = null (if need auth)]
-    ['type'=>'GET' , 'uri'=>'all-posts' , 'controller'=>'PostsController' , 'view'=>'allPosts' , 'dependencies' => ['page' => 1] ],
+    //[type , uri , controller , viewName , dependencies [paramName => [defaultValue , [allowed values?] , [not allowed values?]] , auth = null (if need auth)]
+    
+    //Posts
+    ['type'=>'GET' , 'uri'=>'main' , 'controller'=>'PostsController' , 'view'=>'allPosts' , 'dependencies' => ['page' => [1 , [] , []] ,'title' =>['' , [] , []] , 'filterby' => ['votes' , ['votes' , 'created_at' , 'views'] , []] , 'category' => [null , Post::getAllCategories() , []], 'level' => [null , Post::getAllLevels() , []], 'side' => [0 , [0 , 1] , []] , 'idSide' => [0 , [0 , 1] , []]]],
+    ['type'=>'GET' , 'uri'=>'all-posts' , 'controller'=>'PostsController' , 'view'=>'allPosts' , 'dependencies' => ['page' => [1 , [] , []] ,'title' =>['' , [] , []] , 'filterby' => ['votes' , ['votes' , 'created_at' , 'views'] , []] , 'category' => [null , Post::getAllCategories() , []], 'level' => [null , Post::getAllLevels() , []], 'side' => [0 , [0 , 1] , []] , 'idSide' => [0 , [0 , 1] , []]]],
+    ['type' => 'GET' , 'uri'=>'create-post' , 'controller' => 'PostsController' , 'view' => 'createPostsRender' , 'dependencies' => []],
+    ['type' => 'POST' , 'uri'=>'create-post' , 'controller' => 'PostsController' , 'view' => 'createPost' , 'dependencies' => []],
+    ['type' => 'POST' , 'uri'=>'vote-post' , 'controller' => 'PostsController' , 'view' => 'votePost' , 'dependencies' => []],
+    ['type' => 'POST' , 'uri'=>'change-post' , 'controller' => 'PostsController' , 'view' => 'changePost' , 'dependencies' => []],
+    ['type' => 'POST' , 'uri'=>'delete-post' , 'controller' => 'PostsController' , 'view' => 'deletePost' , 'dependencies' => []],
+
+    //User
     ['type' => 'GET' , 'uri'=>'login' , 'controller' => 'UserController' , 'view' => 'loginRender' , 'dependencies' => []],
     ['type' => 'POST' , 'uri'=>'login' , 'controller' => 'UserController' , 'view' => 'authUser' , 'dependencies' => []],
     ['type' => 'GET' , 'uri'=>'sign-up' , 'controller' => 'UserController' , 'view' => 'regRender' , 'dependencies' => []],
     ['type' => 'POST' , 'uri'=>'sign-up' , 'controller' => 'UserController' , 'view' => 'regUser' , 'dependencies' => []],
-    ['type' => 'GET' , 'uri'=>'profile' , 'controller' => 'UserController' , 'view' => 'profileRender' , 'dependencies' => ['id'  => Application::$user->id ?? null]],
+    ['type' => 'GET' , 'uri'=>'profile' , 'controller' => 'UserController' , 'view' => 'profileRender' , 'dependencies' => ['id'  => [Application::$user->id ?? null, [], []] , 'page' => [1 , [] , []] , 'filterby' => ['votes' , ['votes' , 'created_at' , 'views'] , []] , 'category' => [null , Post::getAllCategories() , []], 'level' => [null , Post::getAllLevels() , []], 'side' => [0 , [0 , 1] , []] , 'idSide' => [0 , [0 , 1] , []]]],
+    ['type' => 'GET' , 'uri'=>'logout' , 'controller' => 'UserController' , 'view' => 'logout' , 'dependencies' => []],
+    ['type' => 'POST' , 'uri'=>'delete-user' , 'controller' => 'UserController' , 'view' => 'deleteUser' , 'dependencies' => []],
+    ['type' => 'POST' , 'uri'=>'edit-user' , 'controller' => 'UserController' , 'view' => 'editUser' , 'dependencies' => []],
+    ['type' => 'GET' , 'uri'=>'find-user' , 'controller' => 'UserController' , 'view' => 'findUser' , 'dependencies' => ['name' => [ '', [], []]]],
+    
+
+    // Answers
+    ['type' => 'GET' , 'uri'=>'view-post' , 'controller' => 'AnswersController' , 'view' => 'postRender' , 'dependencies' => ['id' => [Post::getRandomPostId() , [] , []],'page' => [1 , [] , []] , 'filterby' => ['votes' , ['votes' , 'created_at'] , []], 'side' => [0 , [0 , 1] , []] , 'idSide' => [0 , [0 , 1] , []]]],
+    ['type' => 'POST' , 'uri'=>'add-answer' , 'controller' => 'AnswersController' , 'view' => 'addAnswer' , 'dependencies' => []],
+    ['type' => 'POST' , 'uri'=>'vote-answer' , 'controller' => 'AnswersController' , 'view' => 'voteAnswer' , 'dependencies' => []],
+    ['type' => 'POST' , 'uri'=>'change-answer' , 'controller' => 'AnswersController' , 'view' => 'changeAnswer' , 'dependencies' => []],
+    ['type' => 'POST' , 'uri'=>'delete-answer' , 'controller' => 'AnswersController' , 'view' => 'deleteAnswer' , 'dependencies' => []],
+
+    //errors
     'errors' => [['error' => 404 , 'view' => 'render404']]
 ];

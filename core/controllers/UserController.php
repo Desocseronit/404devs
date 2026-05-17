@@ -2,8 +2,9 @@
 require_once(__DIR__.'/../View.php');
 require_once(__DIR__.'/../actions/AuthUser.php');
 require_once(__DIR__.'/../actions/RegNewUser.php');
-use core\{Application , Response , User};
-use core\actions\{AuthUser , RegNewUser};
+require_once(__DIR__.'/../actions/ModifyUser.php');
+use core\{Application , Response , User , Post};
+use core\actions\{AuthUser , RegNewUser, ModifyUser};
 class UserController{
     public function loginRender(){
         if(Application::$user){
@@ -37,9 +38,10 @@ class UserController{
             $response = new Response(403);
         }
         else{
-            Response::redirect('/all-posts');
+            $response = new Response(201);
         }
         $response -> send();
+        return;
     }
 
     public function profileRender($params){
@@ -48,11 +50,67 @@ class UserController{
             return;
         }
         $userId = $params['id'];
+        $page = $params['page'];
+        $filterBy = $params['filterby'];
+        $category = $params['category'];
+        $level = $params['level'];
+        $side = (bool)$params['side'];
+        $idSide = (bool)$params['idSide'];
         $user = null;
         if(!Application::$user || Application::$user->id != $userId) $user = User::find($userId);
         else $user = Application::$user;
-        \view\View::renderView(["userData" => $user->stringify()] , '/profileView.php');
+        $posts = Post::paginate($page , Application::$CONFIG['publicationsPerPage'] , $filterBy , $side , $idSide , $category , $level , $user->id);
+        // \view\View::renderView(["userData" => $user->stringify() , "posts" => $posts] , '/profile.php');
+        \view\View::renderView(['data'=>["userData" => $userId != Application::$user->id ? $user->stringify(true): $user->stringify() , "posts" => $posts]] , '/profile.php');
         $response = new Response(200);
         $response -> send();
+    }
+
+    public function logout(){
+        if(Application::$user) Application::$user->logOut();
+        Response::redirect('/all-posts', 303);
+    }
+
+    public function deleteUser(){
+        Application::$user->delete();
+        $res = new Response(200);
+        $res->send();
+        return;
+    }
+
+    public function editUser(){
+        $actionInstance = new ModifyUser();
+        $res = $actionInstance->execute();
+        $resp;
+        if($res) $resp = new Response(200);
+        else $resp = new Response(400);
+        $resp->send();
+        return;
+    }
+
+    public function findUser($params){
+        $name = $params['name'];
+        $users = User::findByShowName($name);
+        if($name != '') $users[] = User::findByLogin($name);
+        $notFilteredData = [];
+
+        foreach ($users as $item) {
+            if (is_array($item)) {
+                foreach ($item as $subItem) {
+                    if ($subItem instanceof User) {
+                        $notFilteredData[$subItem->id] = $subItem;
+                    }
+                }
+            } elseif ($item instanceof User) {
+                $notFilteredData[$item->id] = $item;
+            }
+        }
+        $data = [];
+        foreach(array_values($notFilteredData) as $user){
+            $data[] = $user->stringify(true);
+        }
+
+        \view\View::renderView(['test' => $data] , '/test.php');
+        return;
     }
 }

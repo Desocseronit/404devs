@@ -3,16 +3,15 @@
 require_once 'NewImages.php';
 require_once 'DeleteImages.php';
 
-use core\{Response, Database, Post, Image};
+use core\{Application ,Response, Database, Post, Image};
 
 class ChangePost {
-    public function execute($req){
-        $body = $req->getInfo()->body->getValue();
+    public function execute(){
+        $req = Application::$request->getInfo();
+        $body = $req->body->getValue();
         $post = Post::find($body->postId->getValue());
-        if($body->userId->getValue() != $post->user_id){
-            $resp = new Response(403);
-            $resp->send();
-            exit;
+        if(Application::$user->id != $post->user_id){
+            return false;
         }
         $resBody = [];
 
@@ -23,7 +22,7 @@ class ChangePost {
         }
         $imagesToDelete = array_diff($originalImages , explode(',',$body->newImages->getValue()));
 
-        if(isset($req->getInfo()->files)){
+        if(isset($req->files)){
             $newImageAction = new NewImages();
             $newImageAction = $newImageAction->execute($req);
             foreach($newImageAction as $img){
@@ -42,19 +41,6 @@ class ChangePost {
         foreach($body as $key=>$val){
             $newValues[$key] = $val->getValue();
         }
-        Database::instance()->updateRecord('posts' , $newValues , 'id = $1' , [$post->id]);
-
-        $imagesPaths = [];
-        foreach($post->getImages()->items() as $img){
-            $imgId = Database::instance()->getOne('post_images' , (int)$img->getValue()->id)->img_id;
-            $imgPath = Database::instance()->getOne('images' , $imgId)->path;
-            $imagesPaths[] = $imgPath; 
-        }
-
-        $resBody['images'] = $imagesPaths;
-        $resBody["post"] = $post->getInfo();
-
-        $res = new Response(200 , $resBody);
-        $res->send();
+        return Database::instance()->updateRecord('posts' , $newValues , 'id = $1' , [$post->id]);
     }
 }

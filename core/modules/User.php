@@ -54,7 +54,8 @@ class User{
         if(!$res){
             return false; 
         }
-        $userRecord = $res;  
+        $userRecord = $res;
+        if($userRecord->status_id == 4) return false;  
         if(password_verify($password,$userRecord->password_hash)){
             $newToken = bin2hex(random_bytes(32));
             Database::instance()->updateRecord(
@@ -78,12 +79,17 @@ class User{
         if($res) return new self($res);
     }
 
-    public function changeAvatar(Image $img){
-        $this->id::instance()->insertRecord('user_avatar',[
-            'user_id' => $this->id,
-            "avatar" => $img->path
-        ]);
+    public function changeAvatar($imgId){
+        Database::instance()->updateRecord('users',[
+            "avatar_id" => $imgId[0]
+        ], 'id = $1' , [$this->id]);
     }
+
+    public function getAvatar(){
+        // $avatar = $this->avatar_id;
+        return Image::findById($this->avatar_id);
+    }
+
     public function logOut(){
         if($this->record && isset($this->record->id)){
             Database::instance()->updateRecord(
@@ -97,6 +103,7 @@ class User{
        
         return true;
     }
+
     public function delete(){
         if($this->record && isset($this->record->id)){
             DataBase::instance()->updateRecord(
@@ -106,6 +113,7 @@ class User{
                 [$this->record->id]
             );
         }
+       
         return true;
     }
     public function modify($newData){
@@ -122,18 +130,44 @@ class User{
             );
         }        
     }
+
     public static function find($id){
         return new self(Database::instance()->getOne('users',$id));
     }
 
-    public function stringify(){
+    public static function findByLogin($name){
+        $usersRecords = Database::instance()->selectRecord('users' , "*"  , [['name', 'ILIKE' , "%$name%"]]);
+        $users = [];
+        foreach($usersRecords->items() as $record){
+            $users[] = new self($record->getValue());
+        }
+        return $users;
+    }
+
+    public static function findByShowName($name){
+        $usersRecords = Database::instance()->selectRecord('users' , "*"  , [ empty($name) ? "TRUE" : "show_name ILIKE '%$name%'"]);
+        $users = [];
+        foreach($usersRecords->items() as $record){
+            $users[] = new self($record->getValue());
+        }
+        return $users;
+    }
+
+    public function stringify($isPrivate = false){
         $vars = $this->record->stringify();
+        if(isset($vars['avatar_id'])){
+            $vars['avatar'] = Image::findById($vars['avatar_id'])->stringify();
+            unset($vars['avatar_id']);
+        }
+        if($isPrivate) unset($vars['email']);
         unset($vars['password_hash']);
         unset($vars['auth_token']);
         return json_encode($vars);
     }
 
     public static function checkIfUserExist(UserData $data){
-        return (bool)Database::instance()->selectRecord('users' , '*' , ['name = \''. $data->name . '\' OR email = \'' . $data->email.'\''])->items();
+        $record = Database::instance()->selectRecord('users' , '*' , ['name = \''. $data->name . '\' OR email = \'' . $data->email.'\''])->items();
+        if($record[0] && $record->{0}->getValue()->status_id == 4) return false;
+        return (bool)$record;
     }
 }

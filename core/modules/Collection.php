@@ -62,4 +62,8 @@ class Collection{
     public function stringify()  {
         return json_encode(array_map(fn($item) => $item->getValue(), $this->_items)); 
     }
+
+    public function length(){
+        return count($this->_items);
+    }
 }

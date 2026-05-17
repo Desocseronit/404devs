@@ -15,6 +15,7 @@ class AnswerData{
  */
 class Answer{
     public $record;
+    public $isLiked = false;
 
     private function __construct($record){
         $this->record = $record;
@@ -60,10 +61,42 @@ class Answer{
         return Database::instance()->insertRecord('answer_images', ['answer_id' => $this->id , 'img_id' => $imgId]);
     }
 
+    public function isAuthor($userId){
+        return $this->userId == $userId;
+    }
+
     public function getInfo(){
-        $vars = get_object_vars($this);
-        unset($vars['record']);
-        unset($vars['id']);
-        return $vars;
+        $vars = $this->record->stringify();
+        $user = User::find($vars['user_id']);
+        $vars['user'] = $user->stringify(true);
+        $ansewrImgs = $this->getImages();
+        $vars['images'] = [];
+        foreach($ansewrImgs->items() as $img){
+            $vars['images'][] = Image::findById($img->getValue()->img_id)->path;
+        }
+        unset($vars['user_id']);
+        return json_encode($vars);
+    }
+
+    public static function paginate($page = 1 , $perPage = 20 , $filterBy = 'votes' , $sortSide = false , $sortSideId = false , $post_id = null){
+        $data = Database::instance()->paginate('answers' , $page , $perPage , $filterBy , $sortSide , $sortSideId , [['post_id' , '=' , $post_id]]);
+        $newData = [];
+        foreach($data['data']->items() as $answer){
+            $answerInstance = new self($answer->getValue());
+            $newData[]=$answerInstance->getInfo();
+        }
+        $data['data'] = $newData;
+        return $data;
+    }
+
+    public function vote($val){
+        Database::instance()->incrementField('answers', 'votes' , (int)$val, 'id = $1', [$this->id]);
+        Database::instance()->insertRecord('voted_answers' , ['answer_id' => $this->id , 'user_id' => Application::$user->id]);
+        $this->updateLikeStatus();
+        return $this->isLiked;
+    }
+
+    public function updateLikeStatus(){
+        $this->isLiked = (bool)Database::instance()->selectRecord('voted_answers' , '*' , [['user_id' , '=' , Application::$user->id], ['answer_id' , '=' , $this->id]])->items();
     }
 }

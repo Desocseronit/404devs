@@ -1,11 +1,11 @@
 <?php  namespace core\actions;
-use core\{Image};
+use core\{Application ,Image};
 
 class NewImages{
-    public function execute($req){
+    public function execute(){
         $ids = [];
 
-        $filesData = $req->getInfo()->files->getValue();
+        $filesData = Application::$request->getInfo()->files->getValue();
         $key = $filesData->keys();
         if (!$filesData) {
             return $ids;

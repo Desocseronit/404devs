@@ -2,16 +2,15 @@
 require_once 'NewImages.php';
 require_once 'DeleteImages.php';
 
-use core\{Response, Database , Answer, Image};
+use core\{Application, Response, Database , Answer, Image};
 
 class ChangeAnswer{
-    public function execute($req){
-        $body = $req->getInfo()->body->getValue();
+    public function execute(){
+        $req = Application::$request->getInfo();
+        $body = $req->body->getValue();
         $answer = Answer::find($body->answerId->getValue());
-        if($body->userId->getValue() != $answer->user_id){
-            $resp = new Response(403);
-            $resp->send();
-            exit;
+        if(Application::$user->id != $answer->user_id){
+            return false;
         }
         $resBody = [];
 
@@ -21,7 +20,7 @@ class ChangeAnswer{
             $originalImages[] = Image::findById($record->img_id)->name;
         }
         $imagesToDelete = array_diff($originalImages , explode(',',$body->newImages->getValue()));
-        if(isset($req->getInfo()->files)){
+        if(isset($req->files)){
             $newImageAction = new NewImages();
             $newImageAction = $newImageAction->execute($req);
             foreach($newImageAction as $img){
@@ -40,19 +39,7 @@ class ChangeAnswer{
         foreach($body as $key=>$val){
             $newValues[$key] = $val->getValue();
         }
-        Database::instance()->updateRecord('answers' , $newValues , 'id = $1' , [$answer->id]);
 
-        $imagesPaths = [];
-        foreach($answer->getImages()->items() as $img){
-            $imgId = Database::instance()->getOne('answer_images' , (int)$img->getValue()->id)->img_id;
-            $imgPath = Database::instance()->getOne('images' , $imgId)->path;
-            $imagesPaths[] = $imgPath; 
-        }
-
-        $resBody['images'] = $imagesPaths;
-        $resBody["answer"] = $answer->getInfo();
-
-        $res = new Response(200 , $resBody);
-        $res->send();
+        return Database::instance()->updateRecord('answers' , $newValues , 'id = $1' , [$answer->id]);
     }
 }

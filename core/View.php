@@ -2,8 +2,9 @@
 use core\{Application};
 class View{
     private static $globalPath = __DIR__.'/views';
-    private static $globalData = [];
+    private static $globalData = ["user" => null];
     static public function renderView($data = [], $path = '/main.php'){
+        self::$globalData['user'] = Application::$user;
         $resultData = array_merge($data , self::$globalData);
         extract($resultData);
         if(!Application::$user){
