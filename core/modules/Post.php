@@ -81,7 +81,7 @@ class Post{
         if(Application::$user) $this->updateLikeStatus();
         else unset($vars['isLiked']);
         $user = User::find($vars['user_id']);
-        $vars['user'] = $user->stringify();
+        $vars['user'] = $user->stringify(true);
         $vars['category'] = Database::instance()->getOne('categories' , $vars['category_id'])->name;
         $vars['level'] = Database::instance()->getOne('levels' , $vars['level_id'])->name;
         $postImgs = $this->getImages();

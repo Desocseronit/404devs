@@ -68,7 +68,7 @@ class Answer{
     public function getInfo(){
         $vars = $this->record->stringify();
         $user = User::find($vars['user_id']);
-        $vars['user'] = $user->stringify();
+        $vars['user'] = $user->stringify(true);
         $ansewrImgs = $this->getImages();
         $vars['images'] = [];
         foreach($ansewrImgs->items() as $img){
