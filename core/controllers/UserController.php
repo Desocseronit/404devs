@@ -18,7 +18,7 @@ class UserController{
         $result = $authUserAction->execute();
         $response = null;
         if(!$result){
-            $response = new Response(401, ['error' => 'Login or password is incorrect']);
+            $response = new Response(401);
             $response -> send();
         }
         else{
