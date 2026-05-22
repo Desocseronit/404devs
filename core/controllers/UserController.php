@@ -45,7 +45,7 @@ class UserController{
     }
 
     public function profileRender($params){
-        if($params['id'] == null && !Application::$user){
+        if(($params['id'] == null && !Application::$user) || !User::find($params['id']) ){
             Response::redirect('/login');
             return;
         }
@@ -61,7 +61,7 @@ class UserController{
         else $user = Application::$user;
         $posts = Post::paginate($page , Application::$CONFIG['publicationsPerPage'] , $filterBy , $side , $idSide , $category , $level , $user->id);
         // \view\View::renderView(["userData" => $user->stringify() , "posts" => $posts] , '/profile.php');
-        \view\View::renderView(['data'=>["userData" => $userId != Application::$user->id ? $user->stringify(true): $user->stringify() , "posts" => $posts]] , '/profile.php');
+        \view\View::renderView(['data'=>["userData" => !Application::$user || $userId != Application::$user->id ? $user->stringify(true): $user->stringify() , "posts" => $posts]] , '/profile.php');
         $response = new Response(200);
         $response -> send();
     }

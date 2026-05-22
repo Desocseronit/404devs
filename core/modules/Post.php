@@ -122,7 +122,7 @@ class Post{
 
     public static function getRandomPostId(){
         $allPosts = Database::instance()->selectRecord('posts' , '*')->items();
-        return $allPosts[array_rand($allPosts)]->getValue()->id;
+        return $allPosts ? $allPosts[array_rand($allPosts)]->getValue()->id : null;
     }
 
     public function incrementViews(){

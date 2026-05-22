@@ -87,7 +87,7 @@ class User{
 
     public function getAvatar(){
         // $avatar = $this->avatar_id;
-        return Image::findById($this->avatar_id);
+        return $this->avatar_id ? Image::findById($this->avatar_id) : null;
     }
 
     public function logOut(){
@@ -132,7 +132,8 @@ class User{
     }
 
     public static function find($id){
-        return new self(Database::instance()->getOne('users',$id));
+        $record = Database::instance()->getOne('users',$id);
+        return $record ?  new self($record) : null;
     }
 
     public static function findByLogin($name){
@@ -167,7 +168,7 @@ class User{
 
     public static function checkIfUserExist(UserData $data){
         $record = Database::instance()->selectRecord('users' , '*' , ['name = \''. $data->name . '\' OR email = \'' . $data->email.'\''])->items();
-        if($record[0] && $record->{0}->getValue()->status_id == 4) return false;
+        if($record[0] && $record[0]->getValue()->status_id == 4) return false;
         return (bool)$record;
     }
 }
