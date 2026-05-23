@@ -37,7 +37,7 @@ class ChangePost {
         unset($body->postId);
         unset($body->userId);
 
-        $newValues = [];
+        $newValues = ['is_changed' => true];
         foreach($body as $key=>$val){
             $newValues[$key] = $val->getValue();
         }

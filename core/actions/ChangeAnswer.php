@@ -35,7 +35,7 @@ class ChangeAnswer{
         unset($body->answerId);
         unset($body->userId);
 
-        $newValues = [];
+        $newValues = ['is_changed' => true];
         foreach($body as $key=>$val){
             $newValues[$key] = $val->getValue();
         }
