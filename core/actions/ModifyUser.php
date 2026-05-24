@@ -7,7 +7,7 @@ class ModifyUser{
         $req = Application::$request->getInfo();
         $body = (array)json_decode($req->body->getValue()->stringify());
         $user = Application::$user;
-        if($req->files->getValue()->items()){
+        if(isset($req->files) && $req->files->getValue()->items()){
             $imgId = new NewImages();
             $imgId = $imgId->execute();
             $body['newAvatar'] = $imgId;

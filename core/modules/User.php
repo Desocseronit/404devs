@@ -80,6 +80,9 @@ class User{
     }
 
     public function changeAvatar($imgId){
+        $Oldava = Image::findById($this->avatar_id);
+        Database::instance()->deleteRecord('images', "id = $1", [$Oldava->id]);
+        unlink(__DIR__.'/../../'.$Oldava->path);
         Database::instance()->updateRecord('users',[
             "avatar_id" => $imgId[0]
         ], 'id = $1' , [$this->id]);
