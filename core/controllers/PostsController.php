@@ -13,8 +13,10 @@ class PostsController{
         $page = $params['page'];
         $title = $params['title'];
         $filterBy = $params['filterby'];
-        $category = Database::instance()->getOne('categories' , $params['category'] , 'name')->id;
-        $level = $params['level'];
+        $categoryRecord = Database::instance()->getOne('categories' , $params['category'] , 'name');
+        $category = $categoryRecord ? $categoryRecord->id : null;
+        $levelRecord = Database::instance()->getOne('levels' , $params['level'] , 'name');
+        $level = $levelRecord ? $levelRecord->id : null;
         $side = (bool)$params['side'];
         $idSide = (bool)$params['idSide'];
         $data = Post::paginate($page , Application::$CONFIG['publicationsPerPage'] , $filterBy , $side , $idSide , $category , $level , title : $title);
