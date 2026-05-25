@@ -11,7 +11,7 @@ class NewPost{
         $body = $req->body->getValue();
         $user = Application::$user;
         $imgs = [];
-        if($req->files->getValue()->items()){
+        if(isset($req->files) && $req->files->getValue()->items()){
             $imgs = new NewImages();
             $imgs = $imgs->execute();
         }

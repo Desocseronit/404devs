@@ -13,7 +13,7 @@ class PostsController{
         $page = $params['page'];
         $title = $params['title'];
         $filterBy = $params['filterby'];
-        $category = $params['category'];
+        $category = Database::instance()->getOne('categories' , $params['category'] , 'name')->id;
         $level = $params['level'];
         $side = (bool)$params['side'];
         $idSide = (bool)$params['idSide'];
