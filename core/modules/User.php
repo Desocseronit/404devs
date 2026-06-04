@@ -116,7 +116,6 @@ class User{
                 [$this->record->id]
             );
         }
-       
         return true;
     }
     public function modify($newData){

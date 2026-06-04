@@ -1,0 +1,41 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family:Inria Sans;
+}
+
+*::selection{
+    background-color: #C9C9C9;
+    color: #111217;
+}
+
+.footer{
+    margin-top: 5vh;
+    width: 100%;
+    background: #111217;
+    border-top: 1px solid #2E313D;
+    padding: 35px 80px;
+    display: flex;
+    justify-content: space-between;
+    color: white;
+}
+
+.footer-block{
+    width:300px;
+    text-align:center;
+}
+
+.footer-block h3{
+    font-size:20px;
+    margin-bottom:15px;
+}
+
+.footer-block p{
+    margin:8px 0;
+    color:#C9C9C9;
+    font-size:15px;
+}
+.footer-block a{
+    text-decoration: none;
+}

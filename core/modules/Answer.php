@@ -50,6 +50,7 @@ class Answer{
     }
 
     public function delete(){
+        Database::instance()->deleteRecord('voted_answers' , 'answer_id = $1' , [$this->id]);
         return Database::instance()->deleteRecord('answers' , 'id = $1' , [$this->id]);
     }
 

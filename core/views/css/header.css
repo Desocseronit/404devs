@@ -1,0 +1,52 @@
+
+header{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    background-color: black;
+    align-items: center;
+    padding: 0 30px;
+    height: 80px;
+    position: sticky;
+    top: 0;
+    z-index: 2
+}
+header a{
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+header a:hover{
+    color: rgb(168, 159, 159);
+}
+.header_first_part{
+    color: white;
+    font-size: 28px;
+    font-weight: bold;
+}
+.header_second_part{
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    justify-content: space-between;
+}
+.auth,.header_register{
+    background-color: transparent;
+    border:1px solid white ;
+    color:white ;
+    cursor: pointer;
+    padding: 5px 15px;  
+}
+.auth:hover,.header_register:hover{
+    background-color: white;
+    color: black;
+}
+
+#header_avatar{
+    cursor: pointer;
+}
+

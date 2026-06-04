@@ -57,6 +57,7 @@ class Post{
 
     public function delete(){
         Database::instance()->deleteRecord('answers' , 'post_id = $1' , [$this->id]);
+        Database::instance()->deleteRecord('voted_posts' , 'post_id = $1' , [$this->id]);
         return Database::instance()->deleteRecord('posts' , 'id = $1' , [$this->id]);
     }
 
@@ -96,7 +97,7 @@ class Post{
         return json_encode($vars);
     }
 
-    public static function paginate($page = 1 , $perPage = 20 , $filterBy = 'votes' , $sortSide = false , $sortSideId = false , $category = null, $level = null , $userId = null , $title = null){
+    public static function paginate($page = 1 , $perPage = 20 , $filterBy = 'votes' , $sortSide = false , $sortSideId = false , $category = null, $level = null , $userId = null , $title = null , $answers = null){
         $conditions = [];
         if($category){
             $conditions[] = ['category_id' , '=' , $category];
