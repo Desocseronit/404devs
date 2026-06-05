@@ -547,7 +547,7 @@
                         }
                     let editImage = document.createElement('div')
                     editImage.className = 'edit_image'
-                    document.querySelector('.content-box').appendChild(editImage)
+                    PostContainer.querySelector('.content-box').appendChild(editImage)
                     let renderImage = () =>{
                         editImage.innerHTML = ''
                         editingOldImages.forEach((imgObj,index)=>{
@@ -592,7 +592,7 @@
                                 img.src = reader.result
                                 a.appendChild(img)
                                 
-                                document.querySelector('.edit-label').before(a)
+                                editImage.querySelector('.edit-label').before(a)
                                 a.href = reader.result
                                 a.addEventListener('mousedown', e => {
                                     if (e.button == 1) {
