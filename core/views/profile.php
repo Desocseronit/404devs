@@ -340,6 +340,11 @@
             selectedFiles.forEach(file => {
                 formData.append('media[]', file)
             })
+            if(document.getElementById('category_button').innerText == 'select category' || document.getElementById('level_button').innerText == 'select level'){
+                alert('the level or category selection must not be empty')
+                return
+            }
+            
             fetch('/create-post', {
                 method: 'POST',
                 body: formData
