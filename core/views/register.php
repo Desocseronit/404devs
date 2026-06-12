@@ -25,10 +25,10 @@
                     <input type="text" id="login" name="username" placeholder="Username">
                 </div>
                 <div class="password">
-                    <input type="password" id="password" name="password" placeholder="Password">
+                    <input type="password" id="password" name="password" placeholder="Password" minlength="8">
                 </div>
                 <div class="password_again">
-                    <input type="password"  id="password_verify" placeholder="Password-verify">
+                    <input type="password"  id="password_verify" placeholder="Password-verify" minlength="8">
                 </div>        
             </div>
             <div class="register">
